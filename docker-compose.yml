@@ -56,6 +56,11 @@ services:
     ports:
       - 5672:5672
       - 15672:15672
+    healthcheck:
+        test: ["CMD", "curl", "-f", "http://localhost:15672"]
+        interval: 30s
+        timeout: 10s
+        retries: 5
     env_file:
       - .env
     restart: unless-stopped
@@ -120,9 +125,10 @@ services:
     env_file:
       - .env
     depends_on:
-      - postgres_issn
-      - keycloak
       - rabbitmq
+      - postgres_issn
+      - postgres_keycloak
+      - keycloak
       - auth
       - presence
       - persons
@@ -130,7 +136,7 @@ services:
       - .:/usr/src/app
       - /usr/src/app/node_modules
     command: yarn start:dev api
-    restart: unless-stopped
+    restart: on-failure
 
 volumes:
   postgres_keycloak_data:

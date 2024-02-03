@@ -1,0 +1,75 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Person {
+  id          Int @id @default(autoincrement())
+
+  createdAt   DateTime?   @default(now()) @map("_createdAt")
+  updatedAt   DateTime?   @default(now()) @map("_updatedAt")
+  createdBy   String?     @map("_createdBy")
+  updatedBy   String?     @map("_updatedBy")
+
+  pseudonyms  Pseudonym[]
+  aliases     Alias[]
+}
+
+model Alias {
+  id          Int         @id @default(autoincrement())
+
+  createdAt   DateTime?   @default(now()) @map("_createdAt")
+  updatedAt   DateTime?   @default(now()) @map("_updatedAt")
+  createdBy   String?     @map("_createdBy")
+  updatedBy   String?     @map("_updatedBy")
+
+  firstName   String?
+  secondName  String?
+  surname     String?
+  birthday    DateTime?
+  deathday    DateTime?
+  birthPlace  String?
+  citizenship String?
+  gender      String?
+
+  documents   Document[]
+
+  personId    Int         @unique
+  person      Person      @relation(fields: [personId], references: [id])
+}
+
+model Pseudonym {
+  id          Int         @id @default(autoincrement())
+
+  createdAt   DateTime?   @default(now()) @map("_createdAt")
+  updatedAt   DateTime?   @default(now()) @map("_updatedAt")
+  createdBy   String?     @map("_createdBy")
+  updatedBy   String?     @map("_updatedBy")
+
+  title       String?
+  personId    Int         @unique
+  person      Person      @relation(fields: [personId], references: [id])
+}
+
+model Document {
+  id          Int         @id @default(autoincrement())
+
+  createdAt   DateTime?   @default(now()) @map("_createdAt")
+  updatedAt   DateTime?   @default(now()) @map("_updatedAt")
+  createdBy   String?     @map("_createdBy")
+  updatedBy   String?     @map("_updatedBy")
+
+  title       String?
+  series      String      @unique
+  issued      DateTime?
+
+  aliasId     Int         @unique
+  alias       Alias       @relation(fields: [aliasId], references: [id])
+}

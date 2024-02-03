@@ -1,12 +1,51 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { PersonsService } from './persons.service';
+import { Ctx, MessagePattern, Payload, RmqContext } from '@nestjs/microservices';
+import { PersonType, PseudonymType, DocumentType, AliasType, SharedService } from '@app/shared';
 
 @Controller()
 export class PersonsController {
-  constructor(private readonly personsService: PersonsService) {}
+  constructor(
+    private readonly sharedService: SharedService,
+    private readonly personsService: PersonsService
+  ) {}
 
-  @Get()
-  getHello(): string {
-    return this.personsService.getHello();
+  @MessagePattern({ cmd: 'get-persons' })
+  async getPersonById(
+    @Ctx() context: RmqContext,
+  ): Promise<PersonType[]> {
+    this.sharedService.acknowledgeMessage(context);
+
+    return this.personsService.getPersons()
+  }
+
+  @MessagePattern({ cmd: 'get-pseudonyms' })
+  async getPseudonymByPersonId(
+    @Ctx() context: RmqContext,
+    @Payload() payload: { id: number }
+  ): Promise<PseudonymType[]> {
+    this.sharedService.acknowledgeMessage(context);
+
+    return this.personsService.getPseudonymByPersonId(payload.id);
+  }
+
+  @MessagePattern({ cmd: 'get-aliases' })
+  async getAliasesByPersonId(
+    @Ctx() context: RmqContext,
+    @Payload() payload: { id: number }
+  ): Promise<AliasType[]> {
+    this.sharedService.acknowledgeMessage(context);
+
+    return this.personsService.getAliasesByPersonId(payload.id);
+  }
+
+  @MessagePattern({ cmd: 'get-documents' })
+  async getDocumentsByAliasId(
+    @Ctx() context: RmqContext,
+    @Payload() payload: { id: number }
+  ): Promise<DocumentType[]> {
+    this.sharedService.acknowledgeMessage(context);
+
+    return this.personsService.getDocumentsByAliasId(payload.id);
   }
 }

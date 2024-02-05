@@ -12,6 +12,11 @@ services:
       POSTGRES_DB: ${KEYCLOAK_POSTGRES_DB}
       POSTGRES_USER: ${KEYCLOAK_POSTGRES_USER}
       POSTGRES_PASSWORD: ${KEYCLOAK_POSTGRES_PASSWORD}
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${KEYCLOAK_POSTGRES_USER}" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
     restart: unless-stopped
     networks:
       - issn-network
@@ -33,18 +38,21 @@ services:
       - issn-network
 
   keycloak:
-    image: quay.io/keycloak/keycloak:legacy
+    image: quay.io/keycloak/keycloak:latest
     container_name: keycloak
     hostname: keycloak
+    command: start-dev --http-relative-path /auth
     environment:
-      DB_VENDOR: POSTGRES
-      DB_ADDR: postgres_keycloak
-      DB_DATABASE: ${KEYCLOAK_POSTGRES_DB}
-      DB_USER: ${KEYCLOAK_POSTGRES_USER}
-      DB_SCHEMA: public
-      DB_PASSWORD: ${KEYCLOAK_POSTGRES_PASSWORD}
-      KEYCLOAK_USER: ${APP_KEYCLOAK_USER}
-      KEYCLOAK_PASSWORD: ${APP_KEYCLOAK_PASSWORD}
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+      KEYCLOAK_DATABASE_HOST: postgres_keycloak
+      KEYCLOAK_DATABASE_PORT: 8001
+      KEYCLOAK_DATABASE_NAME: ${KEYCLOAK_POSTGRES_DB}
+      KEYCLOAK_DATABASE_USER: ${KEYCLOAK_POSTGRES_USER}
+      KEYCLOAK_DATABASE_PASSWORD: ${KEYCLOAK_POSTGRES_PASSWORD}
+      KEYCLOAK_DATABASE_SCHEMA: public
+      KEYCLOAK_ENABLE_STATISTICS: true
+      KEYCLOAK_DATABASE_VENDOR: postgresql
     ports:
       - 8080:8080
     depends_on:

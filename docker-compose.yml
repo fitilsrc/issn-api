@@ -13,6 +13,8 @@ services:
       POSTGRES_USER: ${KEYCLOAK_POSTGRES_USER}
       POSTGRES_PASSWORD: ${KEYCLOAK_POSTGRES_PASSWORD}
     restart: unless-stopped
+    networks:
+      - issn-network
 
   postgres_issn:
     image: postgres:latest
@@ -27,6 +29,8 @@ services:
       POSTGRES_USER: ${APP_POSTGRES_USER}
       POSTGRES_PASSWORD: ${APP_POSTGRES_PASSWORD}
     restart: unless-stopped
+    networks:
+      - issn-network
 
   keycloak:
     image: quay.io/keycloak/keycloak:legacy
@@ -46,6 +50,8 @@ services:
     depends_on:
       - postgres_keycloak
     restart: unless-stopped
+    networks:
+      - issn-network
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -64,6 +70,8 @@ services:
     env_file:
       - .env
     restart: unless-stopped
+    networks:
+      - issn-network
 
   auth:
     build:
@@ -80,6 +88,8 @@ services:
       - /usr/src/app/node_modules
     command: yarn start:dev auth
     restart: unless-stopped
+    networks:
+      - issn-network
 
   presence:
     build:
@@ -97,6 +107,8 @@ services:
       - /usr/src/app/node_modules
     command: yarn start:dev presence
     restart: unless-stopped
+    networks:
+      - issn-network
 
   persons:
     build:
@@ -114,6 +126,8 @@ services:
       - /usr/src/app/node_modules
     command: yarn start:dev persons
     restart: unless-stopped
+    networks:
+      - issn-network
 
   api:
     build:
@@ -121,7 +135,7 @@ services:
       dockerfile: ./apps/issn-api/Dockerfile
     container_name: api
     ports:
-      - 4000:9000
+      - 9000:9000
     env_file:
       - .env
     depends_on:
@@ -137,6 +151,8 @@ services:
       - /usr/src/app/node_modules
     command: yarn start:dev api
     restart: on-failure
+    networks:
+      - issn-network
 
 volumes:
   postgres_keycloak_data:
@@ -144,3 +160,7 @@ volumes:
   postgres_issn_data:
     driver: local
   rabbitmq:
+
+networks:
+  issn-network:
+    external: true

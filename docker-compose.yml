@@ -53,6 +53,8 @@ services:
       KEYCLOAK_DATABASE_SCHEMA: public
       KEYCLOAK_ENABLE_STATISTICS: true
       KEYCLOAK_DATABASE_VENDOR: postgresql
+      PROXY_ADDRESS_FORWARDING: "true"
+      KC_PROXY: edge
     ports:
       - 8080:8080
     depends_on:
@@ -70,13 +72,13 @@ services:
     ports:
       - 5672:5672
       - 15672:15672
-    healthcheck:
-        test: ["CMD", "curl", "-f", "http://localhost:15672"]
-        interval: 30s
-        timeout: 10s
-        retries: 5
     env_file:
       - .env
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:15672"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
     restart: unless-stopped
     networks:
       - issn-network

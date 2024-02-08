@@ -1,6 +1,9 @@
 # compiled output
 /dist
 /node_modules
+postgres_issn_data
+postgres_keycloak_data
+rabbitmq
 
 # Logs
 logs

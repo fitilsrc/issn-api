@@ -7,7 +7,7 @@ services:
     ports:
       - 8001:5432
     volumes:
-      - postgres_keycloak_data:/var/lib/postgresql/data
+      - ./postgres_keycloak_data:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: ${KEYCLOAK_POSTGRES_DB}
       POSTGRES_USER: ${KEYCLOAK_POSTGRES_USER}
@@ -28,7 +28,7 @@ services:
     ports:
       - ${APP_POSTGRES_PORT}:5432
     volumes:
-      - postgres_issn_data:/var/lib/postgresql/data
+      - ./postgres_issn_data:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: ${APP_POSTGRES_DB}
       POSTGRES_USER: ${APP_POSTGRES_USER}
@@ -68,7 +68,7 @@ services:
     container_name: rabbitmq
     hostname: rabbitmq
     volumes:
-      - rabbitmq:/var/lib/rabbitmq
+      - ./rabbitmq:/var/lib/rabbitmq
     ports:
       - 5672:5672
       - 15672:15672

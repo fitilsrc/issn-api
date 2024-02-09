@@ -2,30 +2,9 @@ version: '3.9'
 services:
   postgres:
     image: postgres:latest
-    container_name: postgres_keycloak
+    container_name: postgres
     ports:
-      - 127.0.0.1:5432:5432
-    volumes:
-      - ./.docker/postgres_keycloak_data:/var/lib/postgresql/data
-    environment:
-      POSTGRES_DB: ${KEYCLOAK_POSTGRES_DB}
-      POSTGRES_USER: ${KEYCLOAK_POSTGRES_USER}
-      POSTGRES_PASSWORD: ${KEYCLOAK_POSTGRES_PASSWORD}
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U ${KEYCLOAK_POSTGRES_USER}" ]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-    restart: always
-    networks:
-      - issn-network
-
-  postgres_issn:
-    image: postgres:latest
-    container_name: postgres_issn
-    hostname: postgres_issn
-    ports:
-      - 127.0.0.1:${APP_POSTGRES_PORT}:5432
+      - 5432:5432
     volumes:
       - ./.docker/postgres_issn_data:/var/lib/postgresql/data
     environment:
@@ -33,6 +12,11 @@ services:
       POSTGRES_USER: ${APP_POSTGRES_USER}
       POSTGRES_PASSWORD: ${APP_POSTGRES_PASSWORD}
       POSTGRES_HOST_AUTH_METHOD: 'trust'
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${APP_POSTGRES_USER}" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
     restart: always
     networks:
       - issn-network
@@ -44,10 +28,10 @@ services:
     command: start-dev --http-relative-path /auth
     environment:
       KC_DB: postgres
-      KC_DB_URL: jdbc:postgresql://postgres:5432/${KEYCLOAK_POSTGRES_DB}
+      KC_DB_URL: jdbc:postgresql://postgres:5432/${APP_POSTGRES_DB}
       KC_DB_SCHEMA: public
-      KC_DB_USERNAME: ${KEYCLOAK_POSTGRES_USER}
-      KC_DB_PASSWORD: ${KEYCLOAK_POSTGRES_PASSWORD}
+      KC_DB_USERNAME: ${APP_POSTGRES_USER}
+      KC_DB_PASSWORD: ${APP_POSTGRES_PASSWORD}
       KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
       KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
       PROXY_ADDRESS_FORWARDING: "true"
@@ -72,11 +56,6 @@ services:
       - 15672:15672
     env_file:
       - .env
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:15672"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
     restart: unless-stopped
     networks:
       - issn-network
@@ -107,7 +86,7 @@ services:
     env_file:
       - .env
     depends_on:
-      - postgres_issn
+      - postgres
       - keycloak
       - rabbitmq
     volumes:
@@ -126,9 +105,8 @@ services:
     env_file:
       - .env
     depends_on:
-      - postgres_issn
-      - keycloak
-      - rabbitmq
+      postgres:
+        condition: service_healthy
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
@@ -148,7 +126,6 @@ services:
       - .env
     depends_on:
       - rabbitmq
-      - postgres_issn
       - postgres
       - keycloak
       - auth
@@ -163,8 +140,6 @@ services:
       - issn-network
 
 volumes:
-  postgres_keycloak_data:
-    driver: local
   postgres_issn_data:
     driver: local
   rabbitmq:

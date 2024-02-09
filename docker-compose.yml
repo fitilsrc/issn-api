@@ -1,13 +1,12 @@
 version: '3.9'
 services:
-  postgres_keycloak:
+  postgres:
     image: postgres:latest
     container_name: postgres_keycloak
-    hostname: postgres_keycloak
     ports:
-      - 8001:5432
+      - 127.0.0.1:5432:5432
     volumes:
-      - ./postgres_keycloak_data:/var/lib/postgresql/data
+      - ./.docker/postgres_keycloak_data:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: ${KEYCLOAK_POSTGRES_DB}
       POSTGRES_USER: ${KEYCLOAK_POSTGRES_USER}
@@ -17,7 +16,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-    restart: unless-stopped
+    restart: always
     networks:
       - issn-network
 
@@ -26,14 +25,15 @@ services:
     container_name: postgres_issn
     hostname: postgres_issn
     ports:
-      - ${APP_POSTGRES_PORT}:5432
+      - 127.0.0.1:${APP_POSTGRES_PORT}:5432
     volumes:
-      - ./postgres_issn_data:/var/lib/postgresql/data
+      - ./.docker/postgres_issn_data:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: ${APP_POSTGRES_DB}
       POSTGRES_USER: ${APP_POSTGRES_USER}
       POSTGRES_PASSWORD: ${APP_POSTGRES_PASSWORD}
-    restart: unless-stopped
+      POSTGRES_HOST_AUTH_METHOD: 'trust'
+    restart: always
     networks:
       - issn-network
 
@@ -43,22 +43,20 @@ services:
     hostname: keycloak
     command: start-dev --http-relative-path /auth
     environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/${KEYCLOAK_POSTGRES_DB}
+      KC_DB_SCHEMA: public
+      KC_DB_USERNAME: ${KEYCLOAK_POSTGRES_USER}
+      KC_DB_PASSWORD: ${KEYCLOAK_POSTGRES_PASSWORD}
       KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
       KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
-      KEYCLOAK_DATABASE_HOST: postgres_keycloak
-      KEYCLOAK_DATABASE_PORT: 8001
-      KEYCLOAK_DATABASE_NAME: ${KEYCLOAK_POSTGRES_DB}
-      KEYCLOAK_DATABASE_USER: ${KEYCLOAK_POSTGRES_USER}
-      KEYCLOAK_DATABASE_PASSWORD: ${KEYCLOAK_POSTGRES_PASSWORD}
-      KEYCLOAK_DATABASE_SCHEMA: public
-      KEYCLOAK_ENABLE_STATISTICS: true
-      KEYCLOAK_DATABASE_VENDOR: postgresql
       PROXY_ADDRESS_FORWARDING: "true"
       KC_PROXY: edge
     ports:
       - 8080:8080
     depends_on:
-      - postgres_keycloak
+      postgres:
+        condition: service_healthy
     restart: unless-stopped
     networks:
       - issn-network
@@ -68,7 +66,7 @@ services:
     container_name: rabbitmq
     hostname: rabbitmq
     volumes:
-      - ./rabbitmq:/var/lib/rabbitmq
+      - ./.docker/rabbitmq:/var/lib/rabbitmq
     ports:
       - 5672:5672
       - 15672:15672
@@ -151,7 +149,7 @@ services:
     depends_on:
       - rabbitmq
       - postgres_issn
-      - postgres_keycloak
+      - postgres
       - keycloak
       - auth
       - presence

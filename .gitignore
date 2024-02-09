@@ -4,6 +4,7 @@
 postgres_issn_data
 postgres_keycloak_data
 rabbitmq
+.docker
 
 # Logs
 logs

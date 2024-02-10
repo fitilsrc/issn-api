@@ -56,7 +56,6 @@ export class PersonsResolver {
   getDocuments(@Parent() alias: Alias) {
     const { id } = alias;
 
-    console.log('[log] resolve documents', alias)
     return this.personsService.send(
       {
         cmd: 'get-documents',

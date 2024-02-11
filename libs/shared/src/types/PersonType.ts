@@ -1,14 +1,15 @@
 export type PersonType = {
-  id: number;
+  id?: number;
   createdAt?: Date;
   updatedAt?: Date;
   createdBy?: string;
   updatedBy?: string;
   pseudonyms?: PseudonymType[];
+  aliases?: AliasType[];
 }
 
 export type PseudonymType = {
-  id: number;
+  id?: number;
   createdAt?: Date;
   updatedAt?: Date;
   createdBy?: string;
@@ -18,7 +19,7 @@ export type PseudonymType = {
 }
 
 export type DocumentType = {
-  id: number;
+  id?: number;
   createdAt?: Date;
   updatedAt?: Date;
   createdBy?: string;
@@ -30,7 +31,7 @@ export type DocumentType = {
 }
 
 export type AliasType = {
-  id: number;
+  id?: number;
   createdAt?: Date;
   updatedAt?: Date;
   createdBy?: string;

@@ -1,18 +1,18 @@
-import { Query, Resolver, ResolveField, Parent } from "@nestjs/graphql";
-import { Person } from "./models/person.model";
+import { Query, Resolver, ResolveField, Parent, Mutation, Args } from "@nestjs/graphql";
 import { Inject } from "@nestjs/common";
 import { ClientProxy } from "@nestjs/microservices";
-import { Pseudonym } from "./models/pseudonym.model";
 import { Alias } from "./models/alias.model";
 import { Document } from './models/document.model';
+import { AliasResponse, DocumentResponse, PersonResponse, PseudonymResponse } from "./entities";
+import { AliasInput, DocumentInput, PersonInput, PseudonymInput } from "./dto";
 
-@Resolver(() => Person)
+@Resolver(() => PersonResponse)
 export class PersonsResolver {
   constructor(
     @Inject('PERSONS_SERVICE') private readonly personsService: ClientProxy,
   ) {}
 
-  @Query(() => [Person], { name: 'getPersons' })
+  @Query(() => [PersonResponse], { name: 'getPersons' })
   getPersons() {
     const persons = this.personsService.send(
       {
@@ -24,8 +24,56 @@ export class PersonsResolver {
     return persons
   }
 
-  @ResolveField('pseudonyms', () => [Pseudonym])
-  getPseudonyms(@Parent() person: Person) {
+  @Mutation(() => PersonResponse, { name: "createPerson" })
+  createPerson(
+    @Args('personInput') data: PersonInput
+  ) {
+    return this.personsService.send(
+      {
+        cmd: 'create-person',
+      },
+      data
+    )
+  }
+
+  @Mutation(() => PseudonymResponse, { name: "createPseudonym" })
+  createPseudonym(
+    @Args('pseudonymInput') data: PseudonymInput
+  ) {
+    return this.personsService.send(
+      {
+        cmd: 'create-pseudonym',
+      },
+      data
+    )
+  }
+
+  @Mutation(() => DocumentResponse, { name: "createDocument" })
+  createDocument(
+    @Args('documentInput') data: DocumentInput
+  ) {
+    return this.personsService.send(
+      {
+        cmd: 'create-document',
+      },
+      data
+    )
+  }
+
+  @Mutation(() => AliasResponse, { name: "createAlias" })
+  createAlias(
+    @Args('aliasInput') data: AliasInput
+  ) {
+    return this.personsService.send(
+      {
+        cmd: 'create-alias',
+      },
+      data
+    )
+  }
+
+  @ResolveField('pseudonyms', () => [PseudonymResponse])
+  getPseudonyms(@Parent() person: PersonResponse) {
     const { id } = person;
 
     return this.personsService.send(
@@ -39,7 +87,7 @@ export class PersonsResolver {
   }
 
   @ResolveField('aliases', () => [Alias])
-  getAliases(@Parent() person: Person) {
+  getAliases(@Parent() person: PersonResponse) {
     const { id } = person;
 
     return this.personsService.send(

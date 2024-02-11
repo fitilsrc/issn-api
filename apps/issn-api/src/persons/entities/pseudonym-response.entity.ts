@@ -1,10 +1,8 @@
 import { Field, ID, ObjectType } from "@nestjs/graphql";
-import { Pseudonym } from "./pseudonym.model";
-import { Alias } from "./alias.model";
 
-@ObjectType({ description: 'person' })
-export class Person {
-  @Field(type => ID)
+@ObjectType()
+export class PseudonymResponse {
+  @Field(() => ID)
   id: number;
 
   @Field(() => String, {
@@ -27,13 +25,11 @@ export class Person {
   })
   updatedBy?: string;
 
-  @Field(() => [Pseudonym], {
+  @Field(() => String, {
     nullable: true
   })
-  pseudonyms?: Pseudonym[];
+  title?: string;
 
-  @Field(() => [Alias], {
-    nullable: true
-  })
-  aliases?: Alias[];
+  @Field(() => Number)
+  personId: number
 }

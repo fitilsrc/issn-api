@@ -41,7 +41,7 @@ model Alias {
 
   documents   Document[]
 
-  personId    Int         @unique
+  personId    Int
   person      Person      @relation(fields: [personId], references: [id])
 }
 
@@ -54,7 +54,7 @@ model Pseudonym {
   updatedBy   String?     @map("_updatedBy")
 
   title       String?
-  personId    Int         @unique
+  personId    Int
   person      Person      @relation(fields: [personId], references: [id])
 }
 
@@ -67,9 +67,9 @@ model Document {
   updatedBy   String?     @map("_updatedBy")
 
   title       String?
-  series      String      @unique
+  series      String?
   issued      DateTime?
 
-  aliasId     Int         @unique
+  aliasId     Int
   alias       Alias       @relation(fields: [aliasId], references: [id])
 }

@@ -65,6 +65,9 @@ export class PersonsService {
     return await this.prisma.alias.findMany({
       where: {
         personId
+      },
+      include: {
+        documents: true
       }
     });
   }
@@ -74,11 +77,42 @@ export class PersonsService {
    * @param data
    * @returns Promise<AliasType>
    */
-  async createAlias(data: Prisma.AliasCreateInput): Promise<AliasType> {
+  async createAlias(data: AliasType): Promise<AliasType> {
+    const documents = data.documents;
     data.createdAt = new Date();
+    const id = parseInt(data.id.toString());
 
     return await this.prisma.alias.create({
-      data,
+      data: {
+        ...data,
+        documents: documents && {
+          createMany: {
+            data: documents
+          }
+        }
+      },
+    })
+  }
+
+  /**
+   * Update alias associated with person
+   * @param id
+   * @param data
+   * @returns Promise<AliasType>
+   */
+  async updateAlias(id: number, data: Prisma.AliasUpdateInput): Promise<AliasType> {
+    data.updatedAt = new Date();
+
+    return await this.prisma.alias.update({
+      where: {
+        id: parseInt(id.toString())
+      },
+      data: {
+        ...data,
+        documents: {
+          
+        }
+      }
     })
   }
 
@@ -96,15 +130,26 @@ export class PersonsService {
   }
 
   /**
-   * Create new document for persons alias
+   * Create or Update new document for persons alias
    * @param data
    * @returns Promise<DocumentType>
    */
-  async createDocument(data: Prisma.DocumentCreateInput): Promise<DocumentType> {
+  async createOrUpdateDocument(data: DocumentType): Promise<DocumentType> {
     data.createdAt = new Date();
+    const id = parseInt(data.id.toString());
 
-    return this.prisma.document.create({
-      data,
+    return this.prisma.document.upsert({
+      where: {
+        id
+      },
+      update: {
+        ...data,
+        id
+      },
+      create: {
+        ...data,
+        id: undefined
+      }
     })
   }
 }

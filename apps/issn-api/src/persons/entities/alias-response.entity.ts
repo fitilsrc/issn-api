@@ -1,4 +1,5 @@
 import { Field, ID, ObjectType } from "@nestjs/graphql";
+import { DocumentResponse } from "./document-response.entity";
 
 @ObjectType()
 export class AliasResponse {
@@ -67,4 +68,9 @@ export class AliasResponse {
 
   @Field(() => Number)
   personId: number;
+
+  @Field(() => DocumentResponse, {
+    nullable: true
+  })
+  documents: DocumentResponse[];
 }

@@ -1,7 +1,13 @@
-import { Field, InputType } from "@nestjs/graphql";
+import { Field, ID, InputType } from "@nestjs/graphql";
+import { DocumentInput } from "./document.input";
 
 @InputType()
 export class AliasInput {
+  @Field(() => ID, {
+    nullable: true
+  })
+  id?: number;
+
   @Field(() => String, {
     nullable: true
   })
@@ -53,5 +59,10 @@ export class AliasInput {
   gender?: string;
 
   @Field(() => Number)
-  personId?: number;
+  personId: number;
+
+  @Field(() => [DocumentInput], {
+    nullable: true
+  })
+  documents?: DocumentInput[];
 }

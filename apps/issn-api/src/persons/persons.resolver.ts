@@ -48,13 +48,13 @@ export class PersonsResolver {
     )
   }
 
-  @Mutation(() => DocumentResponse, { name: "createDocument" })
-  createDocument(
+  @Mutation(() => DocumentResponse, { name: "createOrUpdateDocument" })
+  createOrUpdateDocument(
     @Args('documentInput') data: DocumentInput
   ) {
     return this.personsService.send(
       {
-        cmd: 'create-document',
+        cmd: 'create-or-update-document',
       },
       data
     )
@@ -69,6 +69,23 @@ export class PersonsResolver {
         cmd: 'create-alias',
       },
       data
+    )
+  }
+
+  @Mutation(() => AliasResponse, { name: 'updateAlias' })
+  updateAlias(
+    @Args('aliasInput') data: AliasInput
+  ) {
+    const { id } = data;
+    delete data.id;
+
+    return this.personsService.send(
+      {
+        cmd: 'update-alias',
+      }, {
+        id,
+        data
+      }
     )
   }
 

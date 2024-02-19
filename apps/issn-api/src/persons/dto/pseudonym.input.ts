@@ -1,7 +1,12 @@
-import { Field, InputType } from "@nestjs/graphql";
+import { Field, ID, InputType } from "@nestjs/graphql";
 
 @InputType()
 export class PseudonymInput {
+  @Field(() => ID, {
+    nullable: true
+  })
+  id?: number;
+
   @Field(() => String, {
     nullable: true
   })

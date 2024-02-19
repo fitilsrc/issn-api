@@ -1,7 +1,12 @@
-import { Field, InputType } from "@nestjs/graphql";
+import { Field, ID, InputType } from "@nestjs/graphql";
 
 @InputType()
 export class DocumentInput {
+  @Field(() => ID, {
+    nullable: true
+  })
+  id?: number;
+
   @Field(() => String, {
     nullable: true
   })
@@ -17,12 +22,18 @@ export class DocumentInput {
   })
   title?: string;
 
-  @Field(() => String)
+  @Field(() => String, {
+    nullable: true
+  })
   series?: string;
 
-  @Field(() => String)
+  @Field(() => String, {
+    nullable: true,
+  })
   issued?: Date;
 
-  @Field(() => Number)
-  aliasId: number;
+  @Field(() => Number, {
+    nullable: true
+  })
+  aliasId?: number;
 }

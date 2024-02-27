@@ -17,6 +17,14 @@ export class PersonsService {
     return await this.prisma.person.findMany();
   }
 
+  async getPersonById(id: number): Promise<PersonType> {
+    return await this.prisma.person.findUniqueOrThrow({
+      where: {
+        id: parseInt(id.toString())
+      }
+    })
+  }
+
   /**
    * Create new person
    * @param data
@@ -110,7 +118,7 @@ export class PersonsService {
       data: {
         ...data,
         documents: {
-          
+
         }
       }
     })

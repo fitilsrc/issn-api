@@ -5,6 +5,7 @@ import { Alias } from "./models/alias.model";
 import { Document } from './models/document.model';
 import { AliasResponse, DocumentResponse, PersonResponse, PseudonymResponse } from "./entities";
 import { AliasInput, DocumentInput, PersonInput, PseudonymInput } from "./dto";
+import { map } from "rxjs/operators";
 
 @Resolver(() => PersonResponse)
 export class PersonsResolver {
@@ -22,6 +23,20 @@ export class PersonsResolver {
     )
 
     return persons
+  }
+
+  @Query(() => PersonResponse, { name: 'getPersonById' })
+  getPersonById(
+    @Args('personInput') data: PersonInput
+  ) {
+    return this.personsService.send(
+      {
+        cmd: 'get-person-by-id',
+      },
+      {
+        id: data.id
+      },
+    )
   }
 
   @Mutation(() => PersonResponse, { name: "createPerson" })

@@ -87,12 +87,6 @@ export class PersonsController {
     @Payload() payload: { id: number, data: Prisma.AliasUpdateInput },
   ): Promise<AliasType> {
     this.sharedService.acknowledgeMessage(context);
-    // if (payload.data.documents) {
-    //   for ( const document of payload.data.documents. ) {
-
-    //   }
-    //   this.personsService.createOrUpdateDocument()
-    // }
     return this.personsService.updateAlias(payload.id, payload.data)
   }
 
@@ -106,13 +100,23 @@ export class PersonsController {
     return this.personsService.getDocumentsByAliasId(payload.id);
   }
 
-  @MessagePattern({ cmd: 'create-or-update-document' })
-  async createOrUpdateDocument(
+  @MessagePattern({ cmd: 'update-document' })
+  async updateDocument(
     @Ctx() context: RmqContext,
     @Payload() payload: DocumentType,
   ): Promise<DocumentType> {
     this.sharedService.acknowledgeMessage(context);
 
-    return this.personsService.createOrUpdateDocument(payload)
+    return this.personsService.updateDocument(payload)
+  }
+
+  @MessagePattern({ cmd: 'create-document' })
+  async createDocument(
+    @Ctx() context: RmqContext,
+    @Payload() payload: DocumentType,
+  ): Promise<DocumentType> {
+    this.sharedService.acknowledgeMessage(context);
+
+    return this.personsService.createDocument(payload)
   }
 }

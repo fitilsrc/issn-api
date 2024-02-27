@@ -63,13 +63,25 @@ export class PersonsResolver {
     )
   }
 
-  @Mutation(() => DocumentResponse, { name: "createOrUpdateDocument" })
-  createOrUpdateDocument(
+  @Mutation(() => DocumentResponse, { name: "updateDocument" })
+  updateDocument(
     @Args('documentInput') data: DocumentInput
   ) {
     return this.personsService.send(
       {
-        cmd: 'create-or-update-document',
+        cmd: 'update-document',
+      },
+      data
+    )
+  }
+
+  @Mutation(() => DocumentResponse, { name: "createDocument" })
+  createDocument(
+    @Args('documentInput') data: DocumentInput
+  ) {
+    return this.personsService.send(
+      {
+        cmd: 'create-document',
       },
       data
     )

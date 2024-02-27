@@ -2,8 +2,10 @@ import { Field, ID, ObjectType } from "@nestjs/graphql";
 
 @ObjectType()
 export class PersonResponse {
-  @Field(() => ID)
-  id: number;
+  @Field(() => ID, {
+    nullable: true
+  })
+  id?: number;
 
   @Field(() => String, {
     nullable: true

@@ -3,6 +3,7 @@ import { PersonsService } from './persons.service';
 import { Ctx, MessagePattern, Payload, RmqContext } from '@nestjs/microservices';
 import { PersonType, PseudonymType, DocumentType, AliasType, SharedService } from '@app/shared';
 import { Prisma } from '@prisma/client';
+import { ResponseForItem, prepareResponseForItem } from '@app/shared/types/ResponseForItem';
 
 @Controller()
 export class PersonsController {
@@ -12,12 +13,22 @@ export class PersonsController {
   ) {}
 
   @MessagePattern({ cmd: 'get-persons' })
-  async getPersonById(
+  async getPersons(
     @Ctx() context: RmqContext,
   ): Promise<PersonType[]> {
     this.sharedService.acknowledgeMessage(context);
 
     return this.personsService.getPersons()
+  }
+
+  @MessagePattern({ cmd: 'get-person-by-id' })
+  async getPersonById(
+    @Ctx() context: RmqContext,
+    @Payload() payload: { id: number }
+  ): Promise<PersonType> {
+    this.sharedService.acknowledgeMessage(context);
+
+    return await this.personsService.getPersonById(payload.id);
   }
 
   @MessagePattern({ cmd: 'create-person' })

@@ -4,6 +4,7 @@ import { SharedModule } from "@app/shared";
 
 @Module({
   imports: [
+    SharedModule,
     SharedModule.registerRmq("PERSONS_SERVICE", process.env.RABBITMQ_PERSONS_QUEUE),
   ],
   providers: [PersonsResolver]

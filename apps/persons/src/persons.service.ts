@@ -88,7 +88,6 @@ export class PersonsService {
   async createAlias(data: AliasType): Promise<AliasType> {
     const documents = data.documents;
     data.createdAt = new Date();
-    const id = parseInt(data.id.toString());
 
     return await this.prisma.alias.create({
       data: {

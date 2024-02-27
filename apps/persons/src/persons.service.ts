@@ -137,26 +137,35 @@ export class PersonsService {
   }
 
   /**
-   * Create or Update new document for persons alias
+   * Update document for person alias
    * @param data
    * @returns Promise<DocumentType>
    */
-  async createOrUpdateDocument(data: DocumentType): Promise<DocumentType> {
-    data.createdAt = new Date();
+  async updateDocument(data: DocumentType): Promise<DocumentType> {
     const id = parseInt(data.id.toString());
 
-    return this.prisma.document.upsert({
+    return this.prisma.document.update({
       where: {
         id
       },
-      update: {
+      data: {
         ...data,
-        id
+        updatedAt: new Date()
       },
-      create: {
+    })
+  }
+
+  /**
+   * Create document for person alias
+   * @param data
+   * @returns Promise<DocumentType>
+   */
+  async createDocument(data: DocumentType): Promise<DocumentType> {
+    return this.prisma.document.create({
+      data: {
         ...data,
-        id: undefined
-      }
+        createdAt: new Date(),
+      },
     })
   }
 }

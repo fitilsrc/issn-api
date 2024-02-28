@@ -3,7 +3,7 @@ import { Inject } from "@nestjs/common";
 import { ClientProxy } from "@nestjs/microservices";
 import { Alias } from "./models/alias.model";
 import { Document } from './models/document.model';
-import { AliasResponse, DocumentResponse, PersonResponse, PseudonymResponse } from "./entities";
+import { AliasResponse, DocumentResponse, PersonResponse, PseudonymResponse, StatusResponse } from "./entities";
 import { AliasInput, DocumentInput, PersonInput, PseudonymInput } from "./dto";
 import { map } from "rxjs/operators";
 
@@ -84,6 +84,19 @@ export class PersonsResolver {
         cmd: 'create-document',
       },
       data
+    )
+  }
+
+  @Mutation(() => StatusResponse, { name: "deleteDocument" })
+  deleteDocument(
+    @Args('documentId') id: number
+  ) {
+    return this.personsService.send(
+      {
+        cmd: 'delete-document-by-id',
+      }, {
+        id
+      }
     )
   }
 

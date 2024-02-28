@@ -1,9 +1,8 @@
 import { Controller } from '@nestjs/common';
 import { PersonsService } from './persons.service';
 import { Ctx, MessagePattern, Payload, RmqContext } from '@nestjs/microservices';
-import { PersonType, PseudonymType, DocumentType, AliasType, SharedService } from '@app/shared';
+import { PersonType, PseudonymType, DocumentType, AliasType, SharedService, StatusResponseType, StatusType } from '@app/shared';
 import { Prisma } from '@prisma/client';
-import { ResponseForItem, prepareResponseForItem } from '@app/shared/types/ResponseForItem';
 
 @Controller()
 export class PersonsController {
@@ -107,7 +106,7 @@ export class PersonsController {
   ): Promise<DocumentType> {
     this.sharedService.acknowledgeMessage(context);
 
-    return this.personsService.updateDocument(payload)
+    return this.personsService.updateDocument(payload);
   }
 
   @MessagePattern({ cmd: 'create-document' })
@@ -117,6 +116,28 @@ export class PersonsController {
   ): Promise<DocumentType> {
     this.sharedService.acknowledgeMessage(context);
 
-    return this.personsService.createDocument(payload)
+    return this.personsService.createDocument(payload);
+  }
+
+  @MessagePattern({ cmd: 'delete-document-by-id' })
+  async deleteDocument(
+    @Ctx() context: RmqContext,
+    @Payload() payload: { id: number },
+  ): Promise<StatusResponseType> {
+    this.sharedService.acknowledgeMessage(context);
+
+    try {
+      const result = await this.personsService.deleteDocument(payload.id);
+      return {
+        status: StatusType.SUCCESS
+      }
+    } catch (error) {
+      let message = 'Unknown error'
+      if (error instanceof Error) message = error.message
+      return {
+        status: StatusType.ERROR,
+        message
+      }
+    }
   }
 }

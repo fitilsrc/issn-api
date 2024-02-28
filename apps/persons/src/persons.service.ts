@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
 import { PersonType, PseudonymType, DocumentType, AliasType } from '@app/shared';
 import { Prisma } from '@prisma/client';
+import { throwError } from 'rxjs';
 
 @Injectable()
 export class PersonsService {
@@ -124,6 +125,19 @@ export class PersonsService {
   }
 
   /**
+   * Get document by id
+   * @param documentId
+   * @returns Promise<DocumentType>
+   */
+  async getDocumentById(documentId: number): Promise<DocumentType> {
+    return this.prisma.document.findUniqueOrThrow({
+      where: {
+        id: documentId
+      }
+    })
+  }
+
+  /**
    * Get all documents associated with alias of person
    * @param aliasId
    * @returns Promise<DocumentType[]>
@@ -167,5 +181,20 @@ export class PersonsService {
         createdAt: new Date(),
       },
     })
+  }
+
+  /**
+   * Delete document attached to person alias
+   * @param documentId
+   */
+  async deleteDocument(documentId: number): Promise<void> {
+    const document = await this.getDocumentById(documentId);
+    if (document) {
+      await this.prisma.document.delete({
+        where: {
+          id: documentId
+        }
+      })
+    }
   }
 }

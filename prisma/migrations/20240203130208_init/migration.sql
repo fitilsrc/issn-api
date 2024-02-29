@@ -70,10 +70,10 @@ CREATE UNIQUE INDEX "Document_series_key" ON "Document"("series");
 CREATE UNIQUE INDEX "Document_aliasId_key" ON "Document"("aliasId");
 
 -- AddForeignKey
-ALTER TABLE "Alias" ADD CONSTRAINT "Alias_personId_fkey" FOREIGN KEY ("personId") REFERENCES "Person"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Alias" ADD CONSTRAINT "Alias_personId_fkey" FOREIGN KEY ("personId") REFERENCES "Person"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
-ALTER TABLE "Pseudonym" ADD CONSTRAINT "Pseudonym_personId_fkey" FOREIGN KEY ("personId") REFERENCES "Person"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Pseudonym" ADD CONSTRAINT "Pseudonym_personId_fkey" FOREIGN KEY ("personId") REFERENCES "Person"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
-ALTER TABLE "Document" ADD CONSTRAINT "Document_aliasId_fkey" FOREIGN KEY ("aliasId") REFERENCES "Alias"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Document" ADD CONSTRAINT "Document_aliasId_fkey" FOREIGN KEY ("aliasId") REFERENCES "Alias"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;

@@ -1,9 +1,11 @@
 import { Field, ID, ObjectType } from "@nestjs/graphql";
 
-@ObjectType()
+@ObjectType({ description: 'document' })
 export class DocumentResponse {
-  @Field(() => ID)
-  id: number;
+  @Field(() => ID, {
+    nullable: true
+  })
+  id?: number;
 
   @Field(() => String, {
     nullable: true
@@ -41,5 +43,5 @@ export class DocumentResponse {
   issued?: Date;
 
   @Field(() => Number)
-  aliasId: number
+  aliasId: number;
 }

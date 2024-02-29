@@ -1,9 +1,7 @@
 import { Query, Resolver, ResolveField, Parent, Mutation, Args } from "@nestjs/graphql";
 import { Inject } from "@nestjs/common";
 import { ClientProxy } from "@nestjs/microservices";
-import { Alias } from "./models/alias.model";
-import { Document } from './models/document.model';
-import { AliasResponse, DocumentResponse, PersonResponse, PseudonymResponse, StatusResponse } from "./entities";
+import { AliasResponse, DocumentResponse, FileResponse, PersonResponse, PseudonymResponse, StatusResponse } from "./entities";
 import { AliasInput, DocumentInput, PersonInput, PseudonymInput } from "./dto";
 import { map } from "rxjs/operators";
 
@@ -27,14 +25,14 @@ export class PersonsResolver {
 
   @Query(() => PersonResponse, { name: 'getPersonById' })
   getPersonById(
-    @Args('personInput') data: PersonInput
+    @Args('personId') personId: number
   ) {
     return this.personsService.send(
       {
         cmd: 'get-person-by-id',
       },
       {
-        id: data.id
+        id: personId
       },
     )
   }
@@ -143,7 +141,7 @@ export class PersonsResolver {
     );
   }
 
-  @ResolveField('aliases', () => [Alias])
+  @ResolveField('aliases', () => [AliasResponse])
   getAliases(@Parent() person: PersonResponse) {
     const { id } = person;
 
@@ -157,8 +155,22 @@ export class PersonsResolver {
     );
   }
 
-  @ResolveField('documents', () => [Document])
-  getDocuments(@Parent() alias: Alias) {
+  @ResolveField('files', () => [FileResponse])
+  getFiles(@Parent() person: PersonResponse) {
+    const { id } = person;
+
+    return this.personsService.send(
+      {
+        cmd: 'get-files',
+      },
+      {
+        id
+      },
+    );
+  }
+
+  @ResolveField('documents', () => [DocumentResponse])
+  getDocuments(@Parent() alias: AliasResponse) {
     const { id } = alias;
 
     return this.personsService.send(

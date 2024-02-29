@@ -3,3 +3,4 @@ export * from './person-response.entity';
 export * from './pseudonym-response.entity';
 export * from './alias-response.entity';
 export * from './status-response.entity';
+export * from './file-response.entity';

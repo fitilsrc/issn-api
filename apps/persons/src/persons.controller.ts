@@ -1,7 +1,7 @@
 import { Controller } from '@nestjs/common';
 import { PersonsService } from './persons.service';
 import { Ctx, MessagePattern, Payload, RmqContext } from '@nestjs/microservices';
-import { PersonType, PseudonymType, DocumentType, AliasType, SharedService, StatusResponseType, StatusType } from '@app/shared';
+import { PersonType, PseudonymType, DocumentType, AliasType, SharedService, StatusResponseType, StatusType, FileType } from '@app/shared';
 import { Prisma } from '@prisma/client';
 
 @Controller()
@@ -68,6 +68,16 @@ export class PersonsController {
     this.sharedService.acknowledgeMessage(context);
 
     return this.personsService.getAliasesByPersonId(payload.id);
+  }
+
+  @MessagePattern({ cmd: 'get-files' })
+  async getFilesByPersonId(
+    @Ctx() context: RmqContext,
+    @Payload() payload: { id: number }
+  ): Promise<FileType[]> {
+    this.sharedService.acknowledgeMessage(context);
+
+    return this.personsService.getFilesByPersonId(payload.id);
   }
 
   @MessagePattern({ cmd: 'create-alias' })

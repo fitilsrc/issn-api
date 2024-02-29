@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
-import { PersonType, PseudonymType, DocumentType, AliasType } from '@app/shared';
+import { PersonType, PseudonymType, DocumentType, AliasType, FileType } from '@app/shared';
 import { Prisma } from '@prisma/client';
 import { throwError } from 'rxjs';
 
@@ -18,6 +18,11 @@ export class PersonsService {
     return await this.prisma.person.findMany();
   }
 
+  /**
+   * Get persons by id with dependencies
+   * @param id
+   * @returns Promise<PersonType>
+   */
   async getPersonById(id: number): Promise<PersonType> {
     return await this.prisma.person.findUniqueOrThrow({
       where: {
@@ -37,6 +42,19 @@ export class PersonsService {
     return await this.prisma.person.create({
       data
     })
+  }
+
+  /**
+   * Get all files related to person bu person id
+   * @param personId
+   * @returns Promise<FileType[]>
+   */
+  async getFilesByPersonId(personId: number): Promise<FileType[]> {
+    return this.prisma.file.findMany({
+      where: {
+        personId,
+      }
+    });
   }
 
   /**

@@ -44,32 +44,17 @@ export class AliasResponse {
   @Field(() => String, {
     nullable: true
   })
-  birthday: Date;
-
-  @Field(() => String, {
-    nullable: true
-  })
-  deathday: Date;
-
-  @Field(() => String, {
-    nullable: true
-  })
-  birthPlace: string;
-
-  @Field(() => String, {
-    nullable: true
-  })
   citizenship: string;
 
   @Field(() => String, {
     nullable: true
   })
-  gender: string;
+  description?: string;
 
   @Field(() => Number)
   personId: number;
 
-  @Field(() => DocumentResponse, {
+  @Field(() => [DocumentResponse], {
     nullable: true
   })
   documents: DocumentResponse[];

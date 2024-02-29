@@ -18,8 +18,19 @@ model Person {
   createdBy   String?     @map("_createdBy")
   updatedBy   String?     @map("_updatedBy")
 
+  birthday    DateTime?
+  birthPlace  String?
+  deathday    DateTime?
+  details     String?
+  signs       String?
+  nationality String?
+  gender      String?
+  religion    String?
+  ideology    String?
+
   pseudonyms  Pseudonym[]
   aliases     Alias[]
+  files       File[]
 }
 
 model Alias {
@@ -30,14 +41,11 @@ model Alias {
   createdBy   String?     @map("_createdBy")
   updatedBy   String?     @map("_updatedBy")
 
+  description String?
   firstName   String?
   secondName  String?
   surname     String?
-  birthday    DateTime?
-  deathday    DateTime?
-  birthPlace  String?
   citizenship String?
-  gender      String?
 
   documents   Document[]
 
@@ -72,4 +80,18 @@ model Document {
 
   aliasId     Int
   alias       Alias       @relation(fields: [aliasId], references: [id])
+}
+
+model File {
+  id          Int         @id @default(autoincrement())
+
+  createdAt   DateTime?   @default(now()) @map("_createdAt")
+  updatedAt   DateTime?   @default(now()) @map("_updatedAt")
+  createdBy   String?     @map("_createdBy")
+  updatedBy   String?     @map("_updatedBy")
+
+  uri         String?
+
+  personId    Int
+  person      Person      @relation(fields: [personId], references: [id])
 }

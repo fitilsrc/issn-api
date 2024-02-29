@@ -1,8 +1,8 @@
 import { Field, ID, ObjectType } from "@nestjs/graphql";
 
-@ObjectType({ description: 'document' })
-export class Document {
-  @Field(type => ID)
+@ObjectType()
+export class FileResponse {
+  @Field(() => ID)
   id: number;
 
   @Field(() => String, {
@@ -28,18 +28,8 @@ export class Document {
   @Field(() => String, {
     nullable: true
   })
-  title: string;
-
-  @Field(() => String, {
-    nullable: true
-  })
-  series: string;
-
-  @Field(() => String, {
-    nullable: true
-  })
-  issued?: Date;
+  uri: string;
 
   @Field(() => Number)
-  aliasId: number;
+  personId: number;
 }

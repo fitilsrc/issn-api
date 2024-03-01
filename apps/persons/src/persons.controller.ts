@@ -40,6 +40,37 @@ export class PersonsController {
     return this.personsService.createPerson(payload)
   }
 
+  @MessagePattern({ cmd: 'update-person' })
+  async updatePerson(
+    @Ctx() context: RmqContext,
+    @Payload() payload: { id: number, data: Prisma.PersonUpdateInput },
+  ): Promise<PersonType> {
+    this.sharedService.acknowledgeMessage(context);
+    return this.personsService.updatePerson(payload.id, payload.data)
+  }
+
+  @MessagePattern({ cmd: 'delete-person' })
+  async deletePerson(
+    @Ctx() context: RmqContext,
+    @Payload() payload: { id: number },
+  ): Promise<StatusResponseType> {
+    this.sharedService.acknowledgeMessage(context);
+
+    try {
+      const result = await this.personsService.deletePerson(payload.id);
+      return {
+        status: StatusType.SUCCESS
+      }
+    } catch (error) {
+      let message = 'Unknown error'
+      if (error instanceof Error) message = error.message
+      return {
+        status: StatusType.ERROR,
+        message
+      }
+    }
+  }
+
   @MessagePattern({ cmd: 'get-pseudonyms' })
   async getPseudonymByPersonId(
     @Ctx() context: RmqContext,

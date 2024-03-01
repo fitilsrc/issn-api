@@ -27,6 +27,11 @@ export class PersonsService {
     return await this.prisma.person.findUniqueOrThrow({
       where: {
         id: parseInt(id.toString())
+      },
+      include: {
+        aliases: true,
+        pseudonyms: true,
+        files: true,
       }
     })
   }
@@ -42,6 +47,89 @@ export class PersonsService {
     return await this.prisma.person.create({
       data
     })
+  }
+
+  /**
+   * Update person by id
+   * @param personId
+   * @param data
+   * @returns Promise<PersonType>
+   */
+  async updatePerson(personId: number, data: Prisma.PersonUpdateInput): Promise<PersonType> {
+    data.updatedAt = new Date();
+    return await this.prisma.person.update({
+      where: {
+        id: parseInt(personId.toString())
+      },
+      data: {
+        ...data
+      }
+    })
+  }
+
+  /**
+   * Delete person by id with relations
+   * @param personId
+   */
+  async deletePerson(personId: number): Promise<void> {
+    const person = await this.getPersonById(personId);
+
+    console.log('[log] person', person)
+
+    if (person) {
+      // const pseudonymIds = person.pseudonyms.map(pseudonym => pseudonym.id);
+      // const aliasesIds = person.aliases.map(alias => alias.id);
+      // const filesIds = person.files.map(file => file.id);
+
+      // if (aliasesIds.length > 0) {
+      //   for(const aliasId of aliasesIds) {
+      //     console.log('[log]', aliasId)
+      //     const alias = await this.prisma.alias.findUniqueOrThrow({
+      //       where: {
+      //         id: aliasId
+      //       },
+      //       include: {
+      //         documents: true
+      //       }
+      //     })
+      //     if (alias) {
+      //       const documentIds = alias.documents.map(document => document.id);
+      //       await this.prisma.document.deleteMany({
+      //         where: {
+      //           id: { in: documentIds }
+      //         }
+      //       })
+      //     }
+      //   }
+      //   await this.prisma.alias.deleteMany({
+      //     where: {
+      //       id: { in: aliasesIds }
+      //     }
+      //   })
+      // }
+
+      // if (pseudonymIds.length > 0) {
+      //   await this.prisma.pseudonym.deleteMany({
+      //     where: {
+      //       id: { in: pseudonymIds }
+      //     }
+      //   })
+      // }
+
+      // if (filesIds.length > 0) {
+      //   await this.prisma.file.deleteMany({
+      //     where: {
+      //       id: { in: filesIds }
+      //     }
+      //   })
+      // }
+
+      await this.prisma.person.delete({
+        where: {
+          id: personId
+        }
+      })
+    }
   }
 
   /**

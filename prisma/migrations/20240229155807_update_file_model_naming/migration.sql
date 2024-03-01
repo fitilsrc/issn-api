@@ -24,4 +24,4 @@ CREATE TABLE "File" (
 );
 
 -- AddForeignKey
-ALTER TABLE "File" ADD CONSTRAINT "File_personId_fkey" FOREIGN KEY ("personId") REFERENCES "Person"("id") ON NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "File" ADD CONSTRAINT "File_personId_fkey" FOREIGN KEY ("personId") REFERENCES "Person"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;

@@ -11,7 +11,7 @@ datasource db {
 }
 
 model Person {
-  id          Int @id @default(autoincrement())
+  id          Int @id @unique @default(autoincrement())
 
   createdAt   DateTime?   @default(now()) @map("_createdAt")
   updatedAt   DateTime?   @default(now()) @map("_updatedAt")
@@ -34,7 +34,7 @@ model Person {
 }
 
 model Alias {
-  id          Int         @id @default(autoincrement())
+  id          Int         @id @unique @default(autoincrement())
 
   createdAt   DateTime?   @default(now()) @map("_createdAt")
   updatedAt   DateTime?   @default(now()) @map("_updatedAt")
@@ -50,11 +50,11 @@ model Alias {
   documents   Document[]
 
   personId    Int
-  person      Person      @relation(fields: [personId], references: [id])
+  person      Person      @relation(fields: [personId], references: [id], onDelete: Cascade)
 }
 
 model Pseudonym {
-  id          Int         @id @default(autoincrement())
+  id          Int         @id @unique @default(autoincrement())
 
   createdAt   DateTime?   @default(now()) @map("_createdAt")
   updatedAt   DateTime?   @default(now()) @map("_updatedAt")
@@ -63,11 +63,11 @@ model Pseudonym {
 
   title       String?
   personId    Int
-  person      Person      @relation(fields: [personId], references: [id])
+  person      Person      @relation(fields: [personId], references: [id], onDelete: Cascade)
 }
 
 model Document {
-  id          Int         @id @default(autoincrement())
+  id          Int         @id @unique @default(autoincrement())
 
   createdAt   DateTime?   @default(now()) @map("_createdAt")
   updatedAt   DateTime?   @default(now()) @map("_updatedAt")
@@ -79,11 +79,11 @@ model Document {
   issued      DateTime?
 
   aliasId     Int
-  alias       Alias       @relation(fields: [aliasId], references: [id])
+  alias       Alias       @relation(fields: [aliasId], references: [id], onDelete: Cascade)
 }
 
 model File {
-  id          Int         @id @default(autoincrement())
+  id          Int         @id @unique @default(autoincrement())
 
   createdAt   DateTime?   @default(now()) @map("_createdAt")
   updatedAt   DateTime?   @default(now()) @map("_updatedAt")
@@ -93,5 +93,5 @@ model File {
   uri         String?
 
   personId    Int
-  person      Person      @relation(fields: [personId], references: [id])
+  person      Person      @relation(fields: [personId], references: [id], onDelete: Cascade)
 }

@@ -49,6 +49,36 @@ export class PersonsResolver {
     )
   }
 
+  @Mutation(() => PersonResponse, { name: 'updatePerson' })
+  updatePerson(
+    @Args('personInput') data: PersonInput
+  ) {
+    const { id } = data;
+    delete data.id;
+
+    return this.personsService.send(
+      {
+        cmd: 'update-person',
+      }, {
+        id,
+        data
+      }
+    )
+  }
+
+  @Mutation(() => StatusResponse, { name: 'deletePerson' })
+  deletePerson(
+    @Args('personId') id: number
+  ) {
+    return this.personsService.send(
+      {
+        cmd: 'delete-person',
+      }, {
+        id,
+      }
+    )
+  }
+
   @Mutation(() => PseudonymResponse, { name: "createPseudonym" })
   createPseudonym(
     @Args('pseudonymInput') data: PseudonymInput

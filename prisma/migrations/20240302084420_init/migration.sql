@@ -5,6 +5,15 @@ CREATE TABLE "Person" (
     "_updatedAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
     "_createdBy" TEXT,
     "_updatedBy" TEXT,
+    "birthday" TIMESTAMP(3),
+    "birthPlace" TEXT,
+    "deathday" TIMESTAMP(3),
+    "details" TEXT,
+    "signs" TEXT,
+    "nationality" TEXT,
+    "gender" TEXT,
+    "religion" TEXT,
+    "ideology" TEXT,
 
     CONSTRAINT "Person_pkey" PRIMARY KEY ("id")
 );
@@ -16,14 +25,11 @@ CREATE TABLE "Alias" (
     "_updatedAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
     "_createdBy" TEXT,
     "_updatedBy" TEXT,
+    "description" TEXT,
     "firstName" TEXT,
     "secondName" TEXT,
     "surname" TEXT,
-    "birthday" TIMESTAMP(3),
-    "deathday" TIMESTAMP(3),
-    "birthPlace" TEXT,
     "citizenship" TEXT,
-    "gender" TEXT,
     "personId" INTEGER NOT NULL,
 
     CONSTRAINT "Alias_pkey" PRIMARY KEY ("id")
@@ -50,30 +56,49 @@ CREATE TABLE "Document" (
     "_createdBy" TEXT,
     "_updatedBy" TEXT,
     "title" TEXT,
-    "series" TEXT NOT NULL,
+    "series" TEXT,
     "issued" TIMESTAMP(3),
     "aliasId" INTEGER NOT NULL,
 
     CONSTRAINT "Document_pkey" PRIMARY KEY ("id")
 );
 
--- CreateIndex
-CREATE UNIQUE INDEX "Alias_personId_key" ON "Alias"("personId");
+-- CreateTable
+CREATE TABLE "File" (
+    "id" SERIAL NOT NULL,
+    "_createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    "_updatedAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    "_createdBy" TEXT,
+    "_updatedBy" TEXT,
+    "uri" TEXT,
+    "personId" INTEGER NOT NULL,
+
+    CONSTRAINT "File_pkey" PRIMARY KEY ("id")
+);
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Pseudonym_personId_key" ON "Pseudonym"("personId");
+CREATE UNIQUE INDEX "Person_id_key" ON "Person"("id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Document_series_key" ON "Document"("series");
+CREATE UNIQUE INDEX "Alias_id_key" ON "Alias"("id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Document_aliasId_key" ON "Document"("aliasId");
+CREATE UNIQUE INDEX "Pseudonym_id_key" ON "Pseudonym"("id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Document_id_key" ON "Document"("id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "File_id_key" ON "File"("id");
 
 -- AddForeignKey
-ALTER TABLE "Alias" ADD CONSTRAINT "Alias_personId_fkey" FOREIGN KEY ("personId") REFERENCES "Person"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "Alias" ADD CONSTRAINT "Alias_personId_fkey" FOREIGN KEY ("personId") REFERENCES "Person"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Pseudonym" ADD CONSTRAINT "Pseudonym_personId_fkey" FOREIGN KEY ("personId") REFERENCES "Person"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "Pseudonym" ADD CONSTRAINT "Pseudonym_personId_fkey" FOREIGN KEY ("personId") REFERENCES "Person"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Document" ADD CONSTRAINT "Document_aliasId_fkey" FOREIGN KEY ("aliasId") REFERENCES "Alias"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "Document" ADD CONSTRAINT "Document_aliasId_fkey" FOREIGN KEY ("aliasId") REFERENCES "Alias"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "File" ADD CONSTRAINT "File_personId_fkey" FOREIGN KEY ("personId") REFERENCES "Person"("id") ON DELETE CASCADE ON UPDATE CASCADE;

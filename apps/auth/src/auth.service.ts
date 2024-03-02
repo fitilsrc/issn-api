@@ -1,7 +1,7 @@
 import { CredentialType, TokensType } from '@app/shared';
 import { UserSessionType } from '@app/shared/types/UserSessionType';
 import { HttpService } from '@nestjs/axios';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Payload } from '@nestjs/microservices';
 import { catchError, firstValueFrom } from 'rxjs';
@@ -13,6 +13,8 @@ export class AuthService {
   private keycloakClientName: string;
   private keycloakClientSecret: string;
   private keycloakRealm: string;
+
+  private readonly logger = new Logger(AuthService.name);
 
   constructor(
     private readonly config: ConfigService,
@@ -109,6 +111,13 @@ export class AuthService {
       username: payload.username,
       password: payload.password
     }
+
+    this.logger.debug(
+      `keycloak id: ${JSON.stringify(this.keycloakClientName)}`,
+    );
+    this.logger.debug(
+      `keycloak secret: ${JSON.stringify(this.keycloakClientSecret)}`,
+    );
 
     const keycloakTokenUri = `${this.keycloakLoginUri}/realms/${this.keycloakRealm}/protocol/openid-connect/token`
 

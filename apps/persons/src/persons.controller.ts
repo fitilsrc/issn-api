@@ -91,6 +91,28 @@ export class PersonsController {
     return this.personsService.createPseudonym(payload)
   }
 
+  @MessagePattern({ cmd: 'delete-pseudonym-by-id' })
+  async deletePseudonym(
+    @Ctx() context: RmqContext,
+    @Payload() payload: { pseudonymId: number },
+  ): Promise<StatusResponseType> {
+    this.sharedService.acknowledgeMessage(context);
+
+    try {
+      await this.personsService.deletePseudonym(payload.pseudonymId);
+      return {
+        status: StatusType.SUCCESS
+      }
+    } catch (error) {
+      let message = 'Unknown error'
+      if (error instanceof Error) message = error.message
+      return {
+        status: StatusType.ERROR,
+        message
+      }
+    }
+  }
+
   @MessagePattern({ cmd: 'get-aliases' })
   async getAliasesByPersonId(
     @Ctx() context: RmqContext,
@@ -128,6 +150,28 @@ export class PersonsController {
   ): Promise<AliasType> {
     this.sharedService.acknowledgeMessage(context);
     return this.personsService.updateAlias(payload.id, payload.data)
+  }
+
+  @MessagePattern({ cmd: 'delete-alias-by-id' })
+  async deleteAlias(
+    @Ctx() context: RmqContext,
+    @Payload() payload: { aliasId: number },
+  ): Promise<StatusResponseType> {
+    this.sharedService.acknowledgeMessage(context);
+
+    try {
+      await this.personsService.deleteAlias(payload.aliasId);
+      return {
+        status: StatusType.SUCCESS
+      }
+    } catch (error) {
+      let message = 'Unknown error'
+      if (error instanceof Error) message = error.message
+      return {
+        status: StatusType.ERROR,
+        message
+      }
+    }
   }
 
   @MessagePattern({ cmd: 'get-documents' })

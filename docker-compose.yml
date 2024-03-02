@@ -144,7 +144,7 @@ services:
     command: server --console-address ":9001" /data
     container_name: minio
     ports:
-      - 9090:9000
+      - 9900:9000
       - 9901:9001
     volumes:
       - ${MINIO_DATA_ROOT_DIR}:/data

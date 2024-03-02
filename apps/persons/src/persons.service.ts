@@ -123,6 +123,22 @@ export class PersonsService {
   }
 
   /**
+   * Delete pseudonym by id
+   * @param pseudonymId
+   */
+  async deletePseudonym(pseudonymId: number): Promise<void> {
+    const pseudonym = await this.getPseudonymByPersonId(pseudonymId);
+
+    if (pseudonym) {
+      await this.prisma.pseudonym.delete({
+        where: {
+          id: pseudonymId
+        }
+      })
+    }
+  }
+
+  /**
    * Get all alias associated with person
    * @param personId
    * @returns Promise<AliasType[]>
@@ -179,6 +195,26 @@ export class PersonsService {
         }
       }
     })
+  }
+
+  /**
+   * Delete alias by alias id
+   * @param aliasId
+   */
+  async deleteAlias(aliasId: number): Promise<void> {
+    const alias = await this.prisma.alias.findUniqueOrThrow({
+      where: {
+        id: aliasId
+      }
+    });
+
+    if (alias) {
+      await this.prisma.alias.delete({
+        where: {
+          id: aliasId
+        }
+      })
+    }
   }
 
   /**

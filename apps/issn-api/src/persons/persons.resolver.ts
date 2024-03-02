@@ -91,6 +91,19 @@ export class PersonsResolver {
     )
   }
 
+  @Mutation(() => StatusResponse, { name: 'deletePseudonym' })
+  deletePseudonym(
+    @Args('pseudonymId') pseudonymId: number
+  ) {
+    return this.personsService.send(
+      {
+        cmd: 'delete-pseudonym-by-id',
+      }, {
+        pseudonymId,
+      }
+    )
+  }
+
   @Mutation(() => DocumentResponse, { name: "updateDocument" })
   updateDocument(
     @Args('documentInput') data: DocumentInput
@@ -153,6 +166,19 @@ export class PersonsResolver {
       }, {
         id,
         data
+      }
+    )
+  }
+
+  @Mutation(() => StatusResponse, { name: 'deleteAlias' })
+  deleteAlias(
+    @Args('aliasId') aliasId: number
+  ) {
+    return this.personsService.send(
+      {
+        cmd: 'delete-alias-by-id',
+      }, {
+        aliasId,
       }
     )
   }

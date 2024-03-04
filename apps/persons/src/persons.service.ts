@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
 import { PersonType, PseudonymType, DocumentType, AliasType, FileType } from '@app/shared';
 import { Prisma } from '@prisma/client';
-import { throwError } from 'rxjs';
 
 @Injectable()
 export class PersonsService {

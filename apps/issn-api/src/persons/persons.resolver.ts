@@ -3,7 +3,6 @@ import { Inject } from "@nestjs/common";
 import { ClientProxy } from "@nestjs/microservices";
 import { AliasResponse, DocumentResponse, FileResponse, PersonResponse, PseudonymResponse, StatusResponse } from "./entities";
 import { AliasInput, DocumentInput, PersonInput, PseudonymInput } from "./dto";
-import { map } from "rxjs/operators";
 
 @Resolver(() => PersonResponse)
 export class PersonsResolver {

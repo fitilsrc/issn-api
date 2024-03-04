@@ -1,21 +1,20 @@
 import { Controller } from '@nestjs/common';
-import { PresenceService } from './presence.service';
+import { FilesService } from './files.service';
 import { Ctx, MessagePattern, RmqContext } from '@nestjs/microservices';
 import { SharedService } from '@app/shared';
 
 @Controller()
-export class PresenceController {
+export class FilesController {
   constructor(
-    private readonly presenceService: PresenceService,
+    private readonly filesService: FilesService,
     private readonly sharedService: SharedService,
   ) {}
 
-  @MessagePattern({ cmd: 'get-presence' })
-  async getPresence(
+  @MessagePattern({ cmd: 'get-files' })
+  async getFiles(
     @Ctx() context: RmqContext,
   ) {
     this.sharedService.acknowledgeMessage(context);
-
-    return this.presenceService.getPresence();
+    return this.filesService.getHello();
   }
 }

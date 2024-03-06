@@ -208,6 +208,30 @@ services:
      timeout: 20s
      retries: 3
 
+  files:
+     build:
+     context: ./
+     dockerfile: ./apps/files/Dockerfile
+     container_name: files
+    labels:
+       files.label: "files"
+    logging:
+       driver: json-file
+       options:
+         labels: files.label
+     env_file:
+       - .env
+     depends_on:
+       - minio
+       - rabbitmq
+     volumes:
+       - .:/usr/src/app
+       - /usr/src/app/node_modules
+     command: yarn start:dev files
+     restart: unless-stopped
+     networks:
+       - issn-network
+
 volumes:
   postgres_issn_data:
     driver: local

@@ -1,6 +1,6 @@
 import { Controller } from '@nestjs/common';
 import { FilesService } from './files.service';
-import { Ctx, MessagePattern, RmqContext } from '@nestjs/microservices';
+import { Ctx, MessagePattern, Payload, RmqContext } from '@nestjs/microservices';
 import { SharedService } from '@app/shared';
 
 @Controller()
@@ -16,5 +16,14 @@ export class FilesController {
   ) {
     this.sharedService.acknowledgeMessage(context);
     return this.filesService.getHello();
+  }
+
+  @MessagePattern({ cmd: 'get-file-url' })
+  async getFileUrl(
+    @Ctx() context: RmqContext,
+    @Payload() payload: { filename: string }
+  ) {
+    this.sharedService.acknowledgeMessage(context);
+    return this.filesService.getFileUrl(payload.filename);
   }
 }

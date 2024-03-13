@@ -24,6 +24,7 @@ export class FilesService {
       filename
     )
     this.logger.debug(`MinIo response: ${JSON.stringify(response)}`);
+
     return {
       uri: response
     };
@@ -48,6 +49,7 @@ export class FilesService {
       });
     }
     this.logger.debug(`MinIo presigned upload urls response: ${JSON.stringify(presignedPutUrls)}`);
+
     return presignedPutUrls;
   }
 
@@ -56,10 +58,26 @@ export class FilesService {
    * @param objectsList
    */
   async removeObjects(objectsList: string[]): Promise<void> {
+    this.logger.debug(`Attempting to delete objects from bucket: ${JSON.stringify(objectsList)}`);
     this.minioService.client.removeObjects(
       'photo',
       objectsList
     );
-    this.logger.debug(`Objects have been deleted from bucket: ${JSON.stringify(objectsList)}`);
+  }
+
+  /**
+   * Service: get a download link to a file object
+   * @param filename
+   * @returns Promise<string>
+   */
+  async getPresignedGetUrl(filename: string): Promise<string> {
+    this.logger.debug(`Attempting to get a download link to a file ${filename}`)
+    const response = this.minioService.client.presignedGetObject(
+      'photo',
+      filename,
+      60 * 60
+    );
+
+    return response;
   }
 }

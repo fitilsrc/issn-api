@@ -63,4 +63,14 @@ export class FilesController {
 
     return statusResponse;
   }
+
+  @MessagePattern({ cmd: 'get-file-download-url' })
+  async getPresignedGetUrl(
+    @Ctx() context: RmqContext,
+    @Payload() payload: { filename: string }
+  ) {
+    this.sharedService.acknowledgeMessage(context);
+
+    return this.filesService.getPresignedGetUrl(payload.filename);
+  }
 }

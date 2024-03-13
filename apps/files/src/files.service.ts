@@ -10,11 +10,6 @@ export class FilesService {
     private readonly minioService: MinioService,
   ) {}
 
-  getHello(): string {
-    this.logger.debug("Hello")
-    return 'Hello Files!';
-  }
-
   async getFileUrl(filename: string): Promise<Partial<FileType>> {
     this.logger.debug(`Attempting to get a link to a file ${filename}`)
     const response = await this.minioService.client.presignedUrl(
@@ -26,5 +21,19 @@ export class FilesService {
     return {
       uri: response
     };
+  }
+
+  async getPresignedPutUrl(filenames: string[]): Promise<Record<string, string>> {
+    const presignedPutUrls: Record<string, string> = {};
+    for (let filename of filenames) {
+      presignedPutUrls[filename] = await this.minioService.client.presignedPutObject(
+        'photo',
+        filename,
+        20 * 60
+      )
+    }
+    this.logger.debug(`MinIo presigned upload urls response: ${JSON.stringify(presignedPutUrls)}`)
+    console.log('[log]', typeof presignedPutUrls)
+    return presignedPutUrls;
   }
 }

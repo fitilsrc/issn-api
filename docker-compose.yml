@@ -217,7 +217,7 @@ services:
       dockerfile: ./apps/files/Dockerfile
     container_name: files
     labels:
-       files.label: "files"
+      files.label: "files"
     logging:
        driver: json-file
        options:

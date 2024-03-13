@@ -7,3 +7,11 @@ export class FileResponse {
   })
   url?: string;
 }
+
+@ObjectType()
+export class FileNamesPutPresignedResponse {
+  @Field(() => String, {
+    nullable: true
+  })
+  urls?: string;
+}

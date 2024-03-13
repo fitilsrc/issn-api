@@ -27,13 +27,27 @@ export class FilesResolver {
     ))
   }
 
-  @Query(() => FileResponse, { name: 'getFileUrl' })
+  @Query(() => FileResponse, { name: 'getPresignedUrl' })
   getFileUrl(
     @Args('fileInput') { filename }: FileInput
   ) {
     return this.filesService.send(
       {
         cmd: 'get-file-url',
+      },
+      {
+        filename
+      },
+    )
+  }
+
+  @Query(() => String, { name: 'getPresignedGetUrl' })
+  getFileDownloadUrl(
+    @Args('fileInput') { filename }: FileInput
+  ) {
+    return this.filesService.send(
+      {
+        cmd: 'get-file-download-url',
       },
       {
         filename

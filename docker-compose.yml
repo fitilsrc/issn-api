@@ -219,9 +219,9 @@ services:
     labels:
       files.label: "files"
     logging:
-      driver: json-file
-      options:
-        labels: files.label
+       driver: json-file
+       options:
+         labels: files.label
     env_file:
       - .env
     depends_on:

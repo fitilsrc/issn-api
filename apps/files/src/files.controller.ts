@@ -1,7 +1,8 @@
 import { Controller } from '@nestjs/common';
 import { FilesService } from './files.service';
 import { Ctx, MessagePattern, Payload, RmqContext } from '@nestjs/microservices';
-import { SharedService } from '@app/shared';
+import { SharedService, StatusResponseType, StatusType } from '@app/shared';
+import { UploadPresignedUrlResponseType } from '@app/shared/types';
 
 @Controller()
 export class FilesController {
@@ -11,21 +12,55 @@ export class FilesController {
   ) {}
 
   @MessagePattern({ cmd: 'get-file-url' })
-  async getFileUrl(
+  async getPresignedUrl(
     @Ctx() context: RmqContext,
     @Payload() payload: { filename: string }
   ) {
     this.sharedService.acknowledgeMessage(context);
-    return this.filesService.getFileUrl(payload.filename);
+
+    return this.filesService.getPresignedUrl(payload.filename);
   }
 
+  /**
+   * Get urls for upload files to s3 bucket
+   * @param context
+   * @param payload
+   * @returns Promise<UploadPresignedUrlResponseType[]>
+   */
   @MessagePattern({ cmd: 'get-presigned-put-urls' })
-  async getFiles(
+  async getUpdatePresignedUrl(
     @Ctx() context: RmqContext,
     @Payload() payload: { filenames: string[] }
-  ) {
+  ): Promise<UploadPresignedUrlResponseType[]> {
     this.sharedService.acknowledgeMessage(context);
 
     return this.filesService.getPresignedPutUrl(payload.filenames);
+  }
+
+  /**
+   * Remove objects from bucket
+   * @param context
+   * @param payload
+   * @returns return Promise<StatusResponseType>
+   */
+  @MessagePattern({ cmd: 'remove-objects' })
+  async removeObjects(
+    @Ctx() context: RmqContext,
+    @Payload() payload: { filenames: string[] }
+  ): Promise<StatusResponseType> {
+    this.sharedService.acknowledgeMessage(context);
+    let statusResponse: StatusResponseType = { status: StatusType.SUCCESS};
+
+    try {
+      const response = await this.filesService.removeObjects(payload.filenames);
+    } catch (error) {
+      let message = 'Unknown error';
+      if (error instanceof Error) message = error.message;
+
+      statusResponse.status = StatusType.ERROR;
+      statusResponse.message = message;
+    }
+
+    return statusResponse;
   }
 }

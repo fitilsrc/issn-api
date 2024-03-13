@@ -46,6 +46,7 @@ export class PersonsController {
     @Payload() payload: { id: number, data: Prisma.PersonUpdateInput },
   ): Promise<PersonType> {
     this.sharedService.acknowledgeMessage(context);
+
     return this.personsService.updatePerson(payload.id, payload.data)
   }
 
@@ -55,20 +56,19 @@ export class PersonsController {
     @Payload() payload: { id: number },
   ): Promise<StatusResponseType> {
     this.sharedService.acknowledgeMessage(context);
+    let statusResponse: StatusResponseType = { status: StatusType.SUCCESS};
 
     try {
-      const result = await this.personsService.deletePerson(payload.id);
-      return {
-        status: StatusType.SUCCESS
-      }
+      await this.personsService.deletePerson(payload.id);
     } catch (error) {
       let message = 'Unknown error'
       if (error instanceof Error) message = error.message
-      return {
-        status: StatusType.ERROR,
-        message
-      }
+
+      statusResponse.status = StatusType.ERROR;
+      statusResponse.message = message;
     }
+
+    return statusResponse;
   }
 
   @MessagePattern({ cmd: 'get-pseudonyms' })

@@ -9,9 +9,14 @@ export class FileResponse {
 }
 
 @ObjectType()
-export class FileNamesPutPresignedResponse {
+export class UploadPresignedUrlsResponse {
   @Field(() => String, {
     nullable: true
   })
-  urls?: string;
+  filename?: string;
+
+  @Field(() => String, {
+    nullable: true
+  })
+  url?: string;
 }

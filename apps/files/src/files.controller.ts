@@ -10,14 +10,6 @@ export class FilesController {
     private readonly sharedService: SharedService,
   ) {}
 
-  @MessagePattern({ cmd: 'get-files' })
-  async getFiles(
-    @Ctx() context: RmqContext,
-  ) {
-    this.sharedService.acknowledgeMessage(context);
-    return this.filesService.getHello();
-  }
-
   @MessagePattern({ cmd: 'get-file-url' })
   async getFileUrl(
     @Ctx() context: RmqContext,
@@ -25,5 +17,15 @@ export class FilesController {
   ) {
     this.sharedService.acknowledgeMessage(context);
     return this.filesService.getFileUrl(payload.filename);
+  }
+
+  @MessagePattern({ cmd: 'get-presigned-put-urls' })
+  async getFiles(
+    @Ctx() context: RmqContext,
+    @Payload() payload: { filenames: string[] }
+  ) {
+    this.sharedService.acknowledgeMessage(context);
+
+    return this.filesService.getPresignedPutUrl(payload.filenames);
   }
 }

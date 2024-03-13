@@ -1,8 +1,9 @@
 import { Query, Resolver, ResolveField, Parent, Mutation, Args } from "@nestjs/graphql";
 import { Inject } from "@nestjs/common";
 import { ClientProxy } from "@nestjs/microservices";
-import { AliasResponse, DocumentResponse, FileResponse, PersonResponse, PseudonymResponse, StatusResponse } from "./entities";
+import { AliasResponse, DocumentResponse, FileResponse, PersonResponse, PseudonymResponse } from "./entities";
 import { AliasInput, DocumentInput, PersonInput, PseudonymInput } from "./dto";
+import { StatusResponse } from "@app/shared/entities/status-response.entity";
 
 @Resolver(() => PersonResponse)
 export class PersonsResolver {

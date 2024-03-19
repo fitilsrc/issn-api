@@ -225,4 +225,14 @@ export class PersonsController {
       }
     }
   }
+
+  @MessagePattern({ cmd: 'add-photo-to-person' })
+  async addPersonPhoto(
+    @Ctx() context: RmqContext,
+    @Payload() payload: FileType,
+  ): Promise<FileType> {
+    this.sharedService.acknowledgeMessage(context);
+
+    return this.personsService.addPersonPhoto(payload)
+  }
 }

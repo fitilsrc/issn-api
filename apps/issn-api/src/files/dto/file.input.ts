@@ -13,5 +13,10 @@ export class FileNamesInput {
   @Field(() => [String], {
     nullable: true
   })
-  filenames: string[];
+  filenames?: string[];
+
+  @Field(() => String, {
+    nullable: true
+  })
+  bucket?: string[];
 }

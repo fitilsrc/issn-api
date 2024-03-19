@@ -30,7 +30,7 @@ export class PersonsService {
       include: {
         aliases: true,
         pseudonyms: true,
-        files: true,
+        photos: true,
       }
     })
   }
@@ -288,5 +288,19 @@ export class PersonsService {
         }
       })
     }
+  }
+
+  /**
+   * Create file entity for person
+   * @param data
+   * @returns Promise<FileType>
+   */
+  async addPersonPhoto(data: FileType): Promise<FileType> {
+    return await this.prisma.file.create({
+      data: {
+        ...data,
+        createdAt: new Date(),
+      }
+    })
   }
 }

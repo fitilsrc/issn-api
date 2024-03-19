@@ -18,5 +18,10 @@ export class UploadPresignedUrlsResponse {
   @Field(() => String, {
     nullable: true
   })
+  bucket?: string;
+
+  @Field(() => String, {
+    nullable: true
+  })
   url?: string;
 }

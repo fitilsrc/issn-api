@@ -17,7 +17,7 @@ export type PersonType = {
 
   pseudonyms?: PseudonymType[];
   aliases?: AliasType[];
-  files?: FileType[];
+  photos?: FileType[];
 }
 
 export type PseudonymType = {
@@ -62,6 +62,8 @@ export type FileType = {
   updatedAt?: Date;
   createdBy?: string;
   updatedBy?: string;
-  uri?: string;
+  filename?: string;
+  bucket?: string;
+  url?: string;
   personId: number;
 }

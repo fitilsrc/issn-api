@@ -1,5 +1,5 @@
 import { FileType } from '@app/shared';
-import { UploadPresignedUrlResponseType } from '@app/shared/types';
+import { PresignedUrlResponseType } from '@app/shared/types';
 import { Injectable, Logger } from '@nestjs/common';
 import { MinioService } from 'nestjs-minio-client';
 
@@ -30,12 +30,29 @@ export class FilesService {
     };
   }
 
+  async getBundleOfPresignedUrls(filenames: string[]): Promise<PresignedUrlResponseType[]> {
+    this.logger.debug(`Attempting to get a link to a bundle of files ${JSON.stringify(filenames)}`)
+    const presignedUrls = [];
+    for (let filename of filenames) {
+      const url = await this.minioService.client.presignedUrl(
+        'GET',
+        'photo',
+        filename
+      );
+      presignedUrls.push({
+        filename,
+        url
+      })
+    }
+    return presignedUrls
+  }
+
   /**
    * Service: get urls for upload files from bucket
    * @param filenames
    * @returns Promise<UploadPresignedUrlResponseType[]>
    */
-  async getPresignedPutUrl(filenames: string[]): Promise<UploadPresignedUrlResponseType[]> {
+  async getPresignedPutUrl(filenames: string[]): Promise<PresignedUrlResponseType[]> {
     const presignedPutUrls = [];
     for (let filename of filenames) {
       const url = await this.minioService.client.presignedPutObject(
@@ -70,14 +87,16 @@ export class FilesService {
    * @param filename
    * @returns Promise<string>
    */
-  async getPresignedGetUrl(filename: string): Promise<string> {
+  async getPresignedGetUrl(filename: string): Promise<Partial<FileType>> {
     this.logger.debug(`Attempting to get a download link to a file ${filename}`)
-    const response = this.minioService.client.presignedGetObject(
+    const response = await this.minioService.client.presignedGetObject(
       'photo',
       filename,
       60 * 60
     );
 
-    return response;
+    return {
+      url: response
+    };
   }
 }

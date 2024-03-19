@@ -25,6 +25,11 @@ export class PhotoInput {
   @Field(() => String, {
     nullable: true
   })
+  bucket?: string;
+
+  @Field(() => String, {
+    nullable: true
+  })
   url?: string;
 
   @Field(() => Number)

@@ -9,7 +9,7 @@ export class FileResponse {
 }
 
 @ObjectType()
-export class UploadPresignedUrlsResponse {
+export class PresignedUrlsResponse {
   @Field(() => String, {
     nullable: true
   })

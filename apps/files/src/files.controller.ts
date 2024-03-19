@@ -2,7 +2,7 @@ import { Controller } from '@nestjs/common';
 import { FilesService } from './files.service';
 import { Ctx, MessagePattern, Payload, RmqContext } from '@nestjs/microservices';
 import { SharedService, StatusResponseType, StatusType } from '@app/shared';
-import { UploadPresignedUrlResponseType } from '@app/shared/types';
+import { PresignedUrlResponseType } from '@app/shared/types';
 
 @Controller()
 export class FilesController {
@@ -21,6 +21,16 @@ export class FilesController {
     return this.filesService.getPresignedUrl(payload.filename);
   }
 
+  @MessagePattern({ cmd: 'get-bundle-of-presigned-urls' })
+  async getBundleOfPresignedUrls(
+    @Ctx() context: RmqContext,
+    @Payload() payload: { filenames: string[] }
+  ): Promise<PresignedUrlResponseType[]> {
+    this.sharedService.acknowledgeMessage(context);
+
+    return this.filesService.getBundleOfPresignedUrls(payload.filenames);
+  }
+
   /**
    * Get urls for upload files to s3 bucket
    * @param context
@@ -31,7 +41,7 @@ export class FilesController {
   async getUpdatePresignedUrl(
     @Ctx() context: RmqContext,
     @Payload() payload: { filenames: string[] }
-  ): Promise<UploadPresignedUrlResponseType[]> {
+  ): Promise<PresignedUrlResponseType[]> {
     this.sharedService.acknowledgeMessage(context);
 
     return this.filesService.getPresignedPutUrl(payload.filenames);

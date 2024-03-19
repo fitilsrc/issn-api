@@ -4,7 +4,7 @@ import { ClientProxy } from "@nestjs/microservices";
 import { FileInput, FileNamesInput } from "./dto/file.input";
 import { firstValueFrom, map } from "rxjs";
 import { StatusResponse } from "@app/shared/entities/status-response.entity";
-import { FileResponse, UploadPresignedUrlsResponse } from "./entities/file-response.entity";
+import { FileResponse, PresignedUrlsResponse } from "./entities/file-response.entity";
 
 @Resolver(() => String)
 export class FilesResolver {
@@ -12,8 +12,8 @@ export class FilesResolver {
     @Inject('FILES_SERVICE') private readonly filesService: ClientProxy,
   ) {}
 
-  @Query(() => [UploadPresignedUrlsResponse], { name: 'getPresignedPutUrls' })
-  async getPresignedPutUrls(
+  @Mutation(() => [PresignedUrlsResponse], { name: 'generateUploadUrls' })
+  async generateUploadUrls(
     @Args('fileNamesInput') { filenames }: FileNamesInput
   ) {
     return await firstValueFrom(this.filesService.send(
@@ -23,11 +23,11 @@ export class FilesResolver {
       {
         filenames
       },
-    ))
+    ));
   }
 
-  @Query(() => FileResponse, { name: 'getPresignedUrl' })
-  async getFileUrl(
+  @Mutation(() => FileResponse, { name: 'generateFileUrl' })
+  async generateFileUrl(
     @Args('fileInput') { filename }: FileInput
   ) {
     return await firstValueFrom(this.filesService.send(
@@ -40,18 +40,32 @@ export class FilesResolver {
     ));
   }
 
-  @Query(() => String, { name: 'getPresignedGetUrl' })
-  getFileDownloadUrl(
+  @Mutation(() => [PresignedUrlsResponse], { name: 'generateBundleOfPresignedUrls' })
+  async generateBundleOfPresignedUrls(
+    @Args('fileNamesInput') { filenames }: FileNamesInput
+  ) {
+    return await firstValueFrom(this.filesService.send(
+      {
+        cmd: 'get-bundle-of-presigned-urls',
+      },
+      {
+        filenames
+      },
+    ));
+  }
+
+  @Mutation(() => FileResponse, { name: 'generateDownloadUrl' })
+  async generateFileDownloadUrl(
     @Args('fileInput') { filename }: FileInput
   ) {
-    return this.filesService.send(
+    return await firstValueFrom(this.filesService.send(
       {
         cmd: 'get-file-download-url',
       },
       {
         filename
       },
-    )
+    ));
   }
 
   @Mutation(() => StatusResponse, { name: 'removeObjects' })

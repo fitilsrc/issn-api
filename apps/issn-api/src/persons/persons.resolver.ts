@@ -1,9 +1,11 @@
 import { Query, Resolver, ResolveField, Parent, Mutation, Args } from "@nestjs/graphql";
 import { Inject } from "@nestjs/common";
 import { ClientProxy } from "@nestjs/microservices";
-import { AliasResponse, DocumentResponse, FileResponse, PersonResponse, PseudonymResponse } from "./entities";
-import { AliasInput, DocumentInput, PersonInput, PseudonymInput } from "./dto";
+import { AliasResponse, DocumentResponse, PersonResponse, PhotoResponse, PseudonymResponse } from "./entities";
+import { AliasInput, DocumentInput, PersonInput, PhotoInput, PseudonymInput } from "./dto";
 import { StatusResponse } from "@app/shared/entities/status-response.entity";
+import { firstValueFrom } from "rxjs";
+import { PersonType } from "@app/shared";
 
 @Resolver(() => PersonResponse)
 export class PersonsResolver {
@@ -12,29 +14,27 @@ export class PersonsResolver {
   ) {}
 
   @Query(() => [PersonResponse], { name: 'getPersons' })
-  getPersons() {
-    const persons = this.personsService.send(
+  async getPersons() {
+    return await firstValueFrom<PersonType[]>(this.personsService.send(
       {
         cmd: 'get-persons',
       },
       {},
-    )
-
-    return persons
+    ));
   }
 
   @Query(() => PersonResponse, { name: 'getPersonById' })
-  getPersonById(
+  async getPersonById(
     @Args('personId') personId: number
   ) {
-    return this.personsService.send(
+    return await firstValueFrom<PersonType>(this.personsService.send(
       {
         cmd: 'get-person-by-id',
       },
       {
         id: personId
       },
-    )
+    ));
   }
 
   @Mutation(() => PersonResponse, { name: "createPerson" })
@@ -211,7 +211,7 @@ export class PersonsResolver {
     );
   }
 
-  @ResolveField('files', () => [FileResponse])
+  @ResolveField('photos', () => [PhotoResponse])
   getFiles(@Parent() person: PersonResponse) {
     const { id } = person;
 
@@ -237,5 +237,17 @@ export class PersonsResolver {
         id
       },
     );
+  }
+
+  @Mutation(() => PhotoResponse, { name: "addPersonPhoto" })
+  createFile(
+    @Args('photoInput') data: PhotoInput
+  ) {
+    return this.personsService.send(
+      {
+        cmd: 'add-photo-to-person',
+      },
+      data
+    )
   }
 }

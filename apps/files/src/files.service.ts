@@ -26,7 +26,7 @@ export class FilesService {
     this.logger.debug(`MinIo response: ${JSON.stringify(response)}`);
 
     return {
-      uri: response
+      url: response
     };
   }
 

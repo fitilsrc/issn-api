@@ -30,7 +30,7 @@ model Person {
 
   pseudonyms  Pseudonym[]
   aliases     Alias[]
-  files       File[]
+  photos      File[]
 }
 
 model Alias {
@@ -90,7 +90,9 @@ model File {
   createdBy   String?     @map("_createdBy")
   updatedBy   String?     @map("_updatedBy")
 
-  uri         String?
+  filename    String?
+  bucket      String?
+  url         String?
 
   personId    Int
   person      Person      @relation(fields: [personId], references: [id], onDelete: Cascade)

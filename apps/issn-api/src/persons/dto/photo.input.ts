@@ -1,19 +1,11 @@
-import { Field, ID, ObjectType } from "@nestjs/graphql";
+import { Field, ID, InputType } from "@nestjs/graphql";
 
-@ObjectType()
-export class FileResponse {
-  @Field(() => ID)
-  id: number;
-
-  @Field(() => String, {
+@InputType()
+export class PhotoInput {
+  @Field(() => ID, {
     nullable: true
   })
-  createdAt?: Date;
-
-  @Field(() => String, {
-    nullable: true
-  })
-  updatedAt?: Date;
+  id?: number;
 
   @Field(() => String, {
     nullable: true
@@ -28,7 +20,12 @@ export class FileResponse {
   @Field(() => String, {
     nullable: true
   })
-  uri: string;
+  filename?: string;
+
+  @Field(() => String, {
+    nullable: true
+  })
+  url?: string;
 
   @Field(() => Number)
   personId: number;

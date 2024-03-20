@@ -2,7 +2,7 @@ import persons from './data/persons.json';
 import pseudonyms from './data/pseudonyms.json';
 import aliases from './data/aliases.json';
 import documents from './data/documents.json';
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from '@app/shared/generated/client';
 
 /* eslint-disable prettier/prettier */
 const prisma = new PrismaClient();

@@ -16,17 +16,18 @@ export class FilesService {
    * @param filename
    * @returns Promise<FileType>
    */
-  async getPresignedUrl(filename: string): Promise<Partial<FileType>> {
+  async getPresignedUrl(filename: string): Promise<PresignedUrlResponseType> {
     this.logger.debug(`Attempting to get a link to a file ${filename}`)
-    const response = await this.minioService.client.presignedUrl(
+    const url = await this.minioService.client.presignedUrl(
       'GET',
       'photo',
       filename
     )
-    this.logger.debug(`MinIo response: ${JSON.stringify(response)}`);
+    this.logger.debug(`MinIo response: ${JSON.stringify(url)}`);
 
     return {
-      url: response
+      filename,
+      url
     };
   }
 
@@ -90,18 +91,19 @@ export class FilesService {
   /**
    * Service: get a download link to a file object
    * @param filename
-   * @returns Promise<string>
+   * @returns Promise<PresignedUrlResponseType>
    */
-  async getPresignedGetUrl(filename: string): Promise<Partial<FileType>> {
+  async getPresignedGetUrl(filename: string): Promise<PresignedUrlResponseType> {
     this.logger.debug(`Attempting to get a download link to a file ${filename}`)
-    const response = await this.minioService.client.presignedGetObject(
+    const url = await this.minioService.client.presignedGetObject(
       'photo',
       filename,
       60 * 60
     );
 
     return {
-      url: response
+      filename,
+      url
     };
   }
 }

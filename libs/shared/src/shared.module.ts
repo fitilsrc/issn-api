@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ClientProxyFactory, Transport } from '@nestjs/microservices';
 
 import { SharedService } from './shared.service';
+import { PrismaService } from './services/prisma.service';
 
 @Module({
   imports: [
@@ -11,7 +12,7 @@ import { SharedService } from './shared.service';
       envFilePath: "./.env",
     })
   ],
-  providers: [SharedService],
+  providers: [SharedService, PrismaService],
   exports: [SharedService],
 })
 export class SharedModule {

@@ -3,6 +3,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  output   = "../libs/shared/src/generated/client"
 }
 
 datasource db {
@@ -92,7 +93,7 @@ model File {
 
   filename    String?
   bucket      String?
-  url         String?
+  mime        String?
 
   personId    Int
   person      Person      @relation(fields: [personId], references: [id], onDelete: Cascade)

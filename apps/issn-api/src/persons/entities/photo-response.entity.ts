@@ -38,7 +38,7 @@ export class PhotoResponse {
   @Field(() => String, {
     nullable: true
   })
-  uri?: string;
+  mime?: string;
 
   @Field(() => Number)
   personId: number;

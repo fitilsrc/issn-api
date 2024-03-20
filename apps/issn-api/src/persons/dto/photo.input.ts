@@ -30,7 +30,7 @@ export class PhotoInput {
   @Field(() => String, {
     nullable: true
   })
-  url?: string;
+  mime?: string;
 
   @Field(() => Number)
   personId: number;

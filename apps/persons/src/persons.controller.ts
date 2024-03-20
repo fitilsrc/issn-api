@@ -235,4 +235,26 @@ export class PersonsController {
 
     return this.personsService.addPersonPhoto(payload)
   }
+
+  @MessagePattern({ cmd: 'delete-media-object-by-id' })
+  async deleteMediaObject(
+    @Ctx() context: RmqContext,
+    @Payload() payload: { id: number },
+  ): Promise<StatusResponseType> {
+    this.sharedService.acknowledgeMessage(context);
+
+    try {
+      const result = await this.personsService.deleteMediaObject(payload.id);
+      return {
+        status: StatusType.SUCCESS
+      }
+    } catch (error) {
+      let message = 'Unknown error'
+      if (error instanceof Error) message = error.message
+      return {
+        status: StatusType.ERROR,
+        message
+      }
+    }
+  }
 }

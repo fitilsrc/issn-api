@@ -250,4 +250,17 @@ export class PersonsResolver {
       data
     )
   }
+
+  @Mutation(() => StatusResponse, { name: "deleteMediaObject" })
+  deleteMediaObject(
+    @Args('mediaId') id: number
+  ) {
+    return this.personsService.send(
+      {
+        cmd: 'delete-media-object-by-id',
+      }, {
+        id
+      }
+    )
+  }
 }

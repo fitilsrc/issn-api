@@ -303,4 +303,23 @@ export class PersonsService {
       }
     })
   }
+
+  /**
+   * Delete media file attached to person entity
+   * @param photoId
+   */
+  async deleteMediaObject(photoId: number): Promise<void> {
+    const photo = await this.prisma.file.findUniqueOrThrow({
+      where: {
+        id: photoId
+      }
+    });
+    if (photo) {
+      await this.prisma.file.delete({
+        where: {
+          id: photoId
+        }
+      })
+    }
+  }
 }

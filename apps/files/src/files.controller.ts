@@ -53,8 +53,8 @@ export class FilesController {
    * @param payload
    * @returns return Promise<StatusResponseType>
    */
-  @MessagePattern({ cmd: 'remove-objects' })
-  async removeObjects(
+  @MessagePattern({ cmd: 'delete-file-objects' })
+  async deleteFileObjects(
     @Ctx() context: RmqContext,
     @Payload() payload: { filenames: string[] }
   ): Promise<StatusResponseType> {
@@ -62,7 +62,7 @@ export class FilesController {
     let statusResponse: StatusResponseType = { status: StatusType.SUCCESS};
 
     try {
-      const response = await this.filesService.removeObjects(payload.filenames);
+      const response = await this.filesService.deleteFileObjects(payload.filenames);
     } catch (error) {
       let message = 'Unknown error';
       if (error instanceof Error) message = error.message;
@@ -74,6 +74,12 @@ export class FilesController {
     return statusResponse;
   }
 
+  /**
+   * Generate file download url
+   * @param context
+   * @param payload
+   * @returns
+   */
   @MessagePattern({ cmd: 'get-file-download-url' })
   async getPresignedGetUrl(
     @Ctx() context: RmqContext,

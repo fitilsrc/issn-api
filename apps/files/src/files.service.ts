@@ -30,6 +30,11 @@ export class FilesService {
     };
   }
 
+  /**
+   * Get bundle of presigned urls
+   * @param filenames
+   * @returns Promise<PresignedUrlResponseType[]>
+   */
   async getBundleOfPresignedUrls(filenames: string[]): Promise<PresignedUrlResponseType[]> {
     this.logger.debug(`Attempting to get a link to a bundle of files ${JSON.stringify(filenames)}`)
     const presignedUrls = [];
@@ -74,7 +79,7 @@ export class FilesService {
    * Remove objects from bucket
    * @param objectsList
    */
-  async removeObjects(objectsList: string[]): Promise<void> {
+  async deleteFileObjects(objectsList: string[]): Promise<void> {
     this.logger.debug(`Attempting to delete objects from bucket: ${JSON.stringify(objectsList)}`);
     this.minioService.client.removeObjects(
       'photo',

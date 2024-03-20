@@ -68,13 +68,13 @@ export class FilesResolver {
     ));
   }
 
-  @Mutation(() => StatusResponse, { name: 'removeObjects' })
-  async removeObjects(
-    @Args('fileNamesInput') { filenames }: FileNamesInput
+  @Mutation(() => StatusResponse, { name: 'deleteFileObjects' })
+  async deleteFileObjects(
+    @Args('fileNamesInput') { filenames, bucket }: FileNamesInput
   ) {
     return await firstValueFrom(this.filesService.send(
       {
-        cmd: 'remove-objects',
+        cmd: 'delete-file-objects',
       },
       {
         filenames

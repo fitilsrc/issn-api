@@ -12,7 +12,8 @@ datasource db {
 }
 
 model Person {
-  id          Int @id @unique @default(autoincrement())
+  id          Int         @id @unique @default(autoincrement())
+  uuid        String?      @default(uuid()) @db.Uuid
 
   createdAt   DateTime?   @default(now()) @map("_createdAt")
   updatedAt   DateTime?   @default(now()) @map("_updatedAt")

@@ -10,6 +10,11 @@ export class PersonResponse {
   @Field(() => String, {
     nullable: true
   })
+  uuid?: string;
+
+  @Field(() => String, {
+    nullable: true
+  })
   createdAt?: Date;
 
   @Field(() => String, {

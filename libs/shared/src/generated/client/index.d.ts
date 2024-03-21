@@ -268,7 +268,7 @@ export namespace Prisma {
 
   /**
    * Prisma Client JS version: 5.9.1
-   * Query Engine version: efd2449663b3d73d637ea1fd226bafbcf45b3102
+   * Query Engine version: 23fdc5965b1e05fc54e5f26ed3de66776b93de64
    */
   export type PrismaVersion = {
     client: string
@@ -1293,6 +1293,7 @@ export namespace Prisma {
 
   export type PersonMinAggregateOutputType = {
     id: number | null
+    uuid: string | null
     createdAt: Date | null
     updatedAt: Date | null
     createdBy: string | null
@@ -1310,6 +1311,7 @@ export namespace Prisma {
 
   export type PersonMaxAggregateOutputType = {
     id: number | null
+    uuid: string | null
     createdAt: Date | null
     updatedAt: Date | null
     createdBy: string | null
@@ -1327,6 +1329,7 @@ export namespace Prisma {
 
   export type PersonCountAggregateOutputType = {
     id: number
+    uuid: number
     createdAt: number
     updatedAt: number
     createdBy: number
@@ -1354,6 +1357,7 @@ export namespace Prisma {
 
   export type PersonMinAggregateInputType = {
     id?: true
+    uuid?: true
     createdAt?: true
     updatedAt?: true
     createdBy?: true
@@ -1371,6 +1375,7 @@ export namespace Prisma {
 
   export type PersonMaxAggregateInputType = {
     id?: true
+    uuid?: true
     createdAt?: true
     updatedAt?: true
     createdBy?: true
@@ -1388,6 +1393,7 @@ export namespace Prisma {
 
   export type PersonCountAggregateInputType = {
     id?: true
+    uuid?: true
     createdAt?: true
     updatedAt?: true
     createdBy?: true
@@ -1492,6 +1498,7 @@ export namespace Prisma {
 
   export type PersonGroupByOutputType = {
     id: number
+    uuid: string | null
     createdAt: Date | null
     updatedAt: Date | null
     createdBy: string | null
@@ -1528,6 +1535,7 @@ export namespace Prisma {
 
   export type PersonSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    uuid?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     createdBy?: boolean
@@ -1549,6 +1557,7 @@ export namespace Prisma {
 
   export type PersonSelectScalar = {
     id?: boolean
+    uuid?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     createdBy?: boolean
@@ -1581,6 +1590,7 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
+      uuid: string | null
       createdAt: Date | null
       updatedAt: Date | null
       createdBy: string | null
@@ -1994,6 +2004,7 @@ export namespace Prisma {
    */ 
   interface PersonFieldRefs {
     readonly id: FieldRef<"Person", 'Int'>
+    readonly uuid: FieldRef<"Person", 'String'>
     readonly createdAt: FieldRef<"Person", 'DateTime'>
     readonly updatedAt: FieldRef<"Person", 'DateTime'>
     readonly createdBy: FieldRef<"Person", 'String'>
@@ -6441,6 +6452,7 @@ export namespace Prisma {
 
   export const PersonScalarFieldEnum: {
     id: 'id',
+    uuid: 'uuid',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     createdBy: 'createdBy',
@@ -6563,20 +6575,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'DateTime'
-   */
-  export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
-    
-
-
-  /**
-   * Reference to a field of type 'DateTime[]'
-   */
-  export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
-    
-
-
-  /**
    * Reference to a field of type 'String'
    */
   export type StringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String'>
@@ -6587,6 +6585,20 @@ export namespace Prisma {
    * Reference to a field of type 'String[]'
    */
   export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'DateTime'
+   */
+  export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
+    
+
+
+  /**
+   * Reference to a field of type 'DateTime[]'
+   */
+  export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
     
 
 
@@ -6612,6 +6624,7 @@ export namespace Prisma {
     OR?: PersonWhereInput[]
     NOT?: PersonWhereInput | PersonWhereInput[]
     id?: IntFilter<"Person"> | number
+    uuid?: UuidNullableFilter<"Person"> | string | null
     createdAt?: DateTimeNullableFilter<"Person"> | Date | string | null
     updatedAt?: DateTimeNullableFilter<"Person"> | Date | string | null
     createdBy?: StringNullableFilter<"Person"> | string | null
@@ -6632,6 +6645,7 @@ export namespace Prisma {
 
   export type PersonOrderByWithRelationInput = {
     id?: SortOrder
+    uuid?: SortOrderInput | SortOrder
     createdAt?: SortOrderInput | SortOrder
     updatedAt?: SortOrderInput | SortOrder
     createdBy?: SortOrderInput | SortOrder
@@ -6655,6 +6669,7 @@ export namespace Prisma {
     AND?: PersonWhereInput | PersonWhereInput[]
     OR?: PersonWhereInput[]
     NOT?: PersonWhereInput | PersonWhereInput[]
+    uuid?: UuidNullableFilter<"Person"> | string | null
     createdAt?: DateTimeNullableFilter<"Person"> | Date | string | null
     updatedAt?: DateTimeNullableFilter<"Person"> | Date | string | null
     createdBy?: StringNullableFilter<"Person"> | string | null
@@ -6675,6 +6690,7 @@ export namespace Prisma {
 
   export type PersonOrderByWithAggregationInput = {
     id?: SortOrder
+    uuid?: SortOrderInput | SortOrder
     createdAt?: SortOrderInput | SortOrder
     updatedAt?: SortOrderInput | SortOrder
     createdBy?: SortOrderInput | SortOrder
@@ -6700,6 +6716,7 @@ export namespace Prisma {
     OR?: PersonScalarWhereWithAggregatesInput[]
     NOT?: PersonScalarWhereWithAggregatesInput | PersonScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"Person"> | number
+    uuid?: UuidNullableWithAggregatesFilter<"Person"> | string | null
     createdAt?: DateTimeNullableWithAggregatesFilter<"Person"> | Date | string | null
     updatedAt?: DateTimeNullableWithAggregatesFilter<"Person"> | Date | string | null
     createdBy?: StringNullableWithAggregatesFilter<"Person"> | string | null
@@ -7027,6 +7044,7 @@ export namespace Prisma {
   }
 
   export type PersonCreateInput = {
+    uuid?: string | null
     createdAt?: Date | string | null
     updatedAt?: Date | string | null
     createdBy?: string | null
@@ -7047,6 +7065,7 @@ export namespace Prisma {
 
   export type PersonUncheckedCreateInput = {
     id?: number
+    uuid?: string | null
     createdAt?: Date | string | null
     updatedAt?: Date | string | null
     createdBy?: string | null
@@ -7066,6 +7085,7 @@ export namespace Prisma {
   }
 
   export type PersonUpdateInput = {
+    uuid?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
@@ -7086,6 +7106,7 @@ export namespace Prisma {
 
   export type PersonUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
+    uuid?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
@@ -7106,6 +7127,7 @@ export namespace Prisma {
 
   export type PersonCreateManyInput = {
     id?: number
+    uuid?: string | null
     createdAt?: Date | string | null
     updatedAt?: Date | string | null
     createdBy?: string | null
@@ -7122,6 +7144,7 @@ export namespace Prisma {
   }
 
   export type PersonUpdateManyMutationInput = {
+    uuid?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
@@ -7139,6 +7162,7 @@ export namespace Prisma {
 
   export type PersonUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
+    uuid?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
@@ -7489,6 +7513,18 @@ export namespace Prisma {
     not?: NestedIntFilter<$PrismaModel> | number
   }
 
+  export type UuidNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedUuidNullableFilter<$PrismaModel> | string | null
+  }
+
   export type DateTimeNullableFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -7552,6 +7588,7 @@ export namespace Prisma {
 
   export type PersonCountOrderByAggregateInput = {
     id?: SortOrder
+    uuid?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     createdBy?: SortOrder
@@ -7573,6 +7610,7 @@ export namespace Prisma {
 
   export type PersonMaxOrderByAggregateInput = {
     id?: SortOrder
+    uuid?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     createdBy?: SortOrder
@@ -7590,6 +7628,7 @@ export namespace Prisma {
 
   export type PersonMinOrderByAggregateInput = {
     id?: SortOrder
+    uuid?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     createdBy?: SortOrder
@@ -7623,6 +7662,21 @@ export namespace Prisma {
     _sum?: NestedIntFilter<$PrismaModel>
     _min?: NestedIntFilter<$PrismaModel>
     _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type UuidNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedUuidNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -7903,12 +7957,12 @@ export namespace Prisma {
     connect?: FileWhereUniqueInput | FileWhereUniqueInput[]
   }
 
-  export type NullableDateTimeFieldUpdateOperationsInput = {
-    set?: Date | string | null
-  }
-
   export type NullableStringFieldUpdateOperationsInput = {
     set?: string | null
+  }
+
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
   }
 
   export type PseudonymUpdateManyWithoutPersonNestedInput = {
@@ -8112,6 +8166,17 @@ export namespace Prisma {
     not?: NestedIntFilter<$PrismaModel> | number
   }
 
+  export type NestedUuidNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedUuidNullableFilter<$PrismaModel> | string | null
+  }
+
   export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -8164,6 +8229,31 @@ export namespace Prisma {
     not?: NestedFloatFilter<$PrismaModel> | number
   }
 
+  export type NestedUuidNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedUuidNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
   export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -8176,17 +8266,6 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
-  }
-
-  export type NestedIntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -8426,6 +8505,7 @@ export namespace Prisma {
   }
 
   export type PersonCreateWithoutAliasesInput = {
+    uuid?: string | null
     createdAt?: Date | string | null
     updatedAt?: Date | string | null
     createdBy?: string | null
@@ -8445,6 +8525,7 @@ export namespace Prisma {
 
   export type PersonUncheckedCreateWithoutAliasesInput = {
     id?: number
+    uuid?: string | null
     createdAt?: Date | string | null
     updatedAt?: Date | string | null
     createdBy?: string | null
@@ -8510,6 +8591,7 @@ export namespace Prisma {
   }
 
   export type PersonUpdateWithoutAliasesInput = {
+    uuid?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
@@ -8529,6 +8611,7 @@ export namespace Prisma {
 
   export type PersonUncheckedUpdateWithoutAliasesInput = {
     id?: IntFieldUpdateOperationsInput | number
+    uuid?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
@@ -8547,6 +8630,7 @@ export namespace Prisma {
   }
 
   export type PersonCreateWithoutPseudonymsInput = {
+    uuid?: string | null
     createdAt?: Date | string | null
     updatedAt?: Date | string | null
     createdBy?: string | null
@@ -8566,6 +8650,7 @@ export namespace Prisma {
 
   export type PersonUncheckedCreateWithoutPseudonymsInput = {
     id?: number
+    uuid?: string | null
     createdAt?: Date | string | null
     updatedAt?: Date | string | null
     createdBy?: string | null
@@ -8600,6 +8685,7 @@ export namespace Prisma {
   }
 
   export type PersonUpdateWithoutPseudonymsInput = {
+    uuid?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
@@ -8619,6 +8705,7 @@ export namespace Prisma {
 
   export type PersonUncheckedUpdateWithoutPseudonymsInput = {
     id?: IntFieldUpdateOperationsInput | number
+    uuid?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
@@ -8707,6 +8794,7 @@ export namespace Prisma {
   }
 
   export type PersonCreateWithoutPhotosInput = {
+    uuid?: string | null
     createdAt?: Date | string | null
     updatedAt?: Date | string | null
     createdBy?: string | null
@@ -8726,6 +8814,7 @@ export namespace Prisma {
 
   export type PersonUncheckedCreateWithoutPhotosInput = {
     id?: number
+    uuid?: string | null
     createdAt?: Date | string | null
     updatedAt?: Date | string | null
     createdBy?: string | null
@@ -8760,6 +8849,7 @@ export namespace Prisma {
   }
 
   export type PersonUpdateWithoutPhotosInput = {
+    uuid?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null
@@ -8779,6 +8869,7 @@ export namespace Prisma {
 
   export type PersonUncheckedUpdateWithoutPhotosInput = {
     id?: IntFieldUpdateOperationsInput | number
+    uuid?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdBy?: NullableStringFieldUpdateOperationsInput | string | null

@@ -4,7 +4,7 @@ import { ClientProxy } from "@nestjs/microservices";
 import { FileInput, FileNamesInput } from "./dto/file.input";
 import { firstValueFrom, map } from "rxjs";
 import { StatusResponse } from "@app/shared/entities/status-response.entity";
-import { FileResponse, PresignedUrlsResponse } from "./entities/file-response.entity";
+import { PresignedUrlResponse } from "./entities/file-response.entity";
 
 @Resolver(() => String)
 export class FilesResolver {
@@ -12,7 +12,7 @@ export class FilesResolver {
     @Inject('FILES_SERVICE') private readonly filesService: ClientProxy,
   ) {}
 
-  @Mutation(() => [PresignedUrlsResponse], { name: 'generateUploadUrls' })
+  @Mutation(() => [PresignedUrlResponse], { name: 'generateUploadUrls' })
   async generateUploadUrls(
     @Args('fileNamesInput') { filenames }: FileNamesInput
   ) {
@@ -26,7 +26,7 @@ export class FilesResolver {
     ));
   }
 
-  @Mutation(() => FileResponse, { name: 'generateFileUrl' })
+  @Mutation(() => PresignedUrlResponse, { name: 'generateFileUrl' })
   async generateFileUrl(
     @Args('fileInput') { filename }: FileInput
   ) {
@@ -40,7 +40,7 @@ export class FilesResolver {
     ));
   }
 
-  @Mutation(() => [PresignedUrlsResponse], { name: 'generateBundleOfPresignedUrls' })
+  @Mutation(() => [PresignedUrlResponse], { name: 'generateBundleOfPresignedUrls' })
   async generateBundleOfPresignedUrls(
     @Args('fileNamesInput') { filenames }: FileNamesInput
   ) {
@@ -54,7 +54,7 @@ export class FilesResolver {
     ));
   }
 
-  @Mutation(() => FileResponse, { name: 'generateDownloadUrl' })
+  @Mutation(() => PresignedUrlResponse, { name: 'generateDownloadUrl' })
   async generateFileDownloadUrl(
     @Args('fileInput') { filename }: FileInput
   ) {

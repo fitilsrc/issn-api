@@ -6,6 +6,11 @@ export class FileInput {
     nullable: true
   })
   filename: string;
+
+  @Field(() => String, {
+    nullable: true
+  })
+  bucket?: string;
 }
 
 @InputType()
@@ -18,5 +23,5 @@ export class FileNamesInput {
   @Field(() => String, {
     nullable: true
   })
-  bucket?: string[];
+  bucket?: string;
 }

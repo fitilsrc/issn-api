@@ -9,7 +9,7 @@ export class PersonsController {
   constructor(
     private readonly sharedService: SharedService,
     private readonly personsService: PersonsService
-  ) {}
+  ) { }
 
   @MessagePattern({ cmd: 'get-persons' })
   async getPersons(
@@ -56,7 +56,7 @@ export class PersonsController {
     @Payload() payload: { id: number },
   ): Promise<StatusResponseType> {
     this.sharedService.acknowledgeMessage(context);
-    let statusResponse: StatusResponseType = { status: StatusType.SUCCESS};
+    let statusResponse: StatusResponseType = { status: StatusType.SUCCESS };
 
     try {
       await this.personsService.deletePerson(payload.id);
@@ -234,6 +234,28 @@ export class PersonsController {
     this.sharedService.acknowledgeMessage(context);
 
     return this.personsService.addPersonPhoto(payload)
+  }
+
+  @MessagePattern({ cmd: 'add-bundle-media-to-person' })
+  async addBundleMediaToPerson(
+    @Ctx() context: RmqContext,
+    @Payload() payload: FileType[],
+  ): Promise<StatusResponseType> {
+    this.sharedService.acknowledgeMessage(context);
+
+    try {
+      await this.personsService.addBundleMediaToPerson(payload)
+      return {
+        status: StatusType.SUCCESS
+      }
+    } catch (error) {
+      let message = 'Unknown error'
+      if (error instanceof Error) message = error.message
+      return {
+        status: StatusType.ERROR,
+        message
+      }
+    }
   }
 
   @MessagePattern({ cmd: 'delete-media-object-by-id' })

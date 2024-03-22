@@ -305,6 +305,19 @@ export class PersonsService {
   }
 
   /**
+   * Adds an array of media files for a person entity
+   * @param data
+   * @returns Promise<Prisma.BatchPayload>
+   */
+  async addBundleMediaToPerson(data: FileType[]): Promise<Prisma.BatchPayload> {
+    const preparedFiles = data.map(file => ({ ...file, createdAt: new Date() }))
+
+    return await this.prisma.file.createMany({
+      data: preparedFiles
+    })
+  }
+
+  /**
    * Delete media file attached to person entity
    * @param photoId
    */

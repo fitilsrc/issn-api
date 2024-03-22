@@ -1,7 +1,7 @@
 import { Field, ID, InputType } from "@nestjs/graphql";
 
 @InputType()
-export class PhotoInput {
+export class MediaInput {
   @Field(() => ID, {
     nullable: true
   })
@@ -34,4 +34,10 @@ export class PhotoInput {
 
   @Field(() => Number)
   personId: number;
+}
+
+@InputType()
+export class MediaBundleInput {
+  @Field(() => [MediaInput])
+  media: MediaInput[];
 }

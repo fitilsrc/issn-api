@@ -2,7 +2,7 @@ import { Query, Resolver, ResolveField, Parent, Mutation, Args } from "@nestjs/g
 import { Inject } from "@nestjs/common";
 import { ClientProxy } from "@nestjs/microservices";
 import { AliasResponse, DocumentResponse, PersonResponse, PhotoResponse, PseudonymResponse } from "./entities";
-import { AliasInput, DocumentInput, PersonInput, PhotoInput, PseudonymInput } from "./dto";
+import { AliasInput, DocumentInput, MediaBundleInput, MediaInput, PersonInput, PseudonymInput } from "./dto";
 import { StatusResponse } from "@app/shared/entities/status-response.entity";
 import { firstValueFrom } from "rxjs";
 import { PersonType } from "@app/shared";
@@ -241,13 +241,25 @@ export class PersonsResolver {
 
   @Mutation(() => PhotoResponse, { name: "addPersonPhoto" })
   createFile(
-    @Args('photoInput') data: PhotoInput
+    @Args('mediaInput') data: MediaInput
   ) {
     return this.personsService.send(
       {
         cmd: 'add-photo-to-person',
       },
       data
+    )
+  }
+
+  @Mutation(() => StatusResponse, { name: "addBundleMediaToPerson" })
+  addBundleMediaToPerson(
+    @Args('mediaBundleInput') data: MediaBundleInput
+  ) {
+    return this.personsService.send(
+      {
+        cmd: 'add-bundle-media-to-person',
+      },
+      data.media
     )
   }
 

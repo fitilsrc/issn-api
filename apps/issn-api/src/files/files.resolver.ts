@@ -45,7 +45,7 @@ export class FilesResolver {
     ));
   }
 
-  @Mutation(() => [PresignedUrlResponse], { name: 'generateBundleOfPresignedUrls' })
+  @Query(() => [PresignedUrlResponse], { name: 'generateBundleOfPresignedUrls' })
   @UseGuards(JwtAuthGuard)
   @Roles(RoleType.ISSN_ADMIN, RoleType.ISSN_USER)
   async generateBundleOfPresignedUrls(

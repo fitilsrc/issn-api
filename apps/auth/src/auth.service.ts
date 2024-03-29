@@ -36,8 +36,8 @@ export class AuthService {
     @Payload() access_token: string,
   ): Promise<any> {
     const params = {
-      access_token,
-      client_id: this.keycloakClientId,
+      token: access_token,
+      client_id: this.keycloakClientName,
       client_secret: this.keycloakClientSecret
     }
 

@@ -1,11 +1,11 @@
 import { Query, Resolver, ResolveField, Parent, Mutation, Args } from "@nestjs/graphql";
-import { Inject } from "@nestjs/common";
+import { Inject, UseGuards } from "@nestjs/common";
 import { ClientProxy } from "@nestjs/microservices";
 import { AliasResponse, DocumentResponse, PersonResponse, PhotoResponse, PseudonymResponse } from "./entities";
 import { AliasInput, DocumentInput, MediaBundleInput, MediaInput, PersonInput, PseudonymInput } from "./dto";
 import { StatusResponse } from "@app/shared/entities/status-response.entity";
 import { firstValueFrom } from "rxjs";
-import { PersonType } from "@app/shared";
+import { JwtAuthGuard, PersonType, RoleType, Roles } from "@app/shared";
 
 @Resolver(() => PersonResponse)
 export class PersonsResolver {
@@ -14,6 +14,8 @@ export class PersonsResolver {
   ) {}
 
   @Query(() => [PersonResponse], { name: 'getPersons' })
+  @UseGuards(JwtAuthGuard)
+  @Roles(RoleType.ISSN_ADMIN, RoleType.ISSN_USER)
   async getPersons() {
     return await firstValueFrom<PersonType[]>(this.personsService.send(
       {
@@ -24,6 +26,8 @@ export class PersonsResolver {
   }
 
   @Query(() => PersonResponse, { name: 'getPersonById' })
+  @UseGuards(JwtAuthGuard)
+  @Roles(RoleType.ISSN_ADMIN, RoleType.ISSN_USER)
   async getPersonById(
     @Args('personId') personId: number
   ) {
@@ -38,6 +42,8 @@ export class PersonsResolver {
   }
 
   @Mutation(() => PersonResponse, { name: "createPerson" })
+  @UseGuards(JwtAuthGuard)
+  @Roles(RoleType.ISSN_ADMIN, RoleType.ISSN_USER)
   createPerson(
     @Args('personInput') data: PersonInput
   ) {
@@ -50,6 +56,8 @@ export class PersonsResolver {
   }
 
   @Mutation(() => PersonResponse, { name: 'updatePerson' })
+  @UseGuards(JwtAuthGuard)
+  @Roles(RoleType.ISSN_ADMIN, RoleType.ISSN_USER)
   updatePerson(
     @Args('personInput') data: PersonInput
   ) {
@@ -67,6 +75,8 @@ export class PersonsResolver {
   }
 
   @Mutation(() => StatusResponse, { name: 'deletePerson' })
+  @UseGuards(JwtAuthGuard)
+  @Roles(RoleType.ISSN_ADMIN, RoleType.ISSN_USER)
   deletePerson(
     @Args('personId') id: number
   ) {
@@ -80,6 +90,8 @@ export class PersonsResolver {
   }
 
   @Mutation(() => PseudonymResponse, { name: "createPseudonym" })
+  @UseGuards(JwtAuthGuard)
+  @Roles(RoleType.ISSN_ADMIN, RoleType.ISSN_USER)
   createPseudonym(
     @Args('pseudonymInput') data: PseudonymInput
   ) {
@@ -92,6 +104,8 @@ export class PersonsResolver {
   }
 
   @Mutation(() => StatusResponse, { name: 'deletePseudonym' })
+  @UseGuards(JwtAuthGuard)
+  @Roles(RoleType.ISSN_ADMIN, RoleType.ISSN_USER)
   deletePseudonym(
     @Args('pseudonymId') pseudonymId: number
   ) {
@@ -105,6 +119,8 @@ export class PersonsResolver {
   }
 
   @Mutation(() => DocumentResponse, { name: "updateDocument" })
+  @UseGuards(JwtAuthGuard)
+  @Roles(RoleType.ISSN_ADMIN, RoleType.ISSN_USER)
   updateDocument(
     @Args('documentInput') data: DocumentInput
   ) {
@@ -117,6 +133,8 @@ export class PersonsResolver {
   }
 
   @Mutation(() => DocumentResponse, { name: "createDocument" })
+  @UseGuards(JwtAuthGuard)
+  @Roles(RoleType.ISSN_ADMIN, RoleType.ISSN_USER)
   createDocument(
     @Args('documentInput') data: DocumentInput
   ) {
@@ -129,6 +147,8 @@ export class PersonsResolver {
   }
 
   @Mutation(() => StatusResponse, { name: "deleteDocument" })
+  @UseGuards(JwtAuthGuard)
+  @Roles(RoleType.ISSN_ADMIN, RoleType.ISSN_USER)
   deleteDocument(
     @Args('documentId') id: number
   ) {
@@ -142,6 +162,8 @@ export class PersonsResolver {
   }
 
   @Mutation(() => AliasResponse, { name: "createAlias" })
+  @UseGuards(JwtAuthGuard)
+  @Roles(RoleType.ISSN_ADMIN, RoleType.ISSN_USER)
   createAlias(
     @Args('aliasInput') data: AliasInput
   ) {
@@ -154,6 +176,8 @@ export class PersonsResolver {
   }
 
   @Mutation(() => AliasResponse, { name: 'updateAlias' })
+  @UseGuards(JwtAuthGuard)
+  @Roles(RoleType.ISSN_ADMIN, RoleType.ISSN_USER)
   updateAlias(
     @Args('aliasInput') data: AliasInput
   ) {
@@ -171,6 +195,8 @@ export class PersonsResolver {
   }
 
   @Mutation(() => StatusResponse, { name: 'deleteAlias' })
+  @UseGuards(JwtAuthGuard)
+  @Roles(RoleType.ISSN_ADMIN, RoleType.ISSN_USER)
   deleteAlias(
     @Args('aliasId') aliasId: number
   ) {
@@ -184,6 +210,8 @@ export class PersonsResolver {
   }
 
   @ResolveField('pseudonyms', () => [PseudonymResponse])
+  @UseGuards(JwtAuthGuard)
+  @Roles(RoleType.ISSN_ADMIN, RoleType.ISSN_USER)
   getPseudonyms(@Parent() person: PersonResponse) {
     const { id } = person;
 
@@ -198,6 +226,8 @@ export class PersonsResolver {
   }
 
   @ResolveField('aliases', () => [AliasResponse])
+  @UseGuards(JwtAuthGuard)
+  @Roles(RoleType.ISSN_ADMIN, RoleType.ISSN_USER)
   getAliases(@Parent() person: PersonResponse) {
     const { id } = person;
 
@@ -212,6 +242,8 @@ export class PersonsResolver {
   }
 
   @ResolveField('photos', () => [PhotoResponse])
+  @UseGuards(JwtAuthGuard)
+  @Roles(RoleType.ISSN_ADMIN, RoleType.ISSN_USER)
   getFiles(@Parent() person: PersonResponse) {
     const { id } = person;
 
@@ -226,6 +258,8 @@ export class PersonsResolver {
   }
 
   @ResolveField('documents', () => [DocumentResponse])
+  @UseGuards(JwtAuthGuard)
+  @Roles(RoleType.ISSN_ADMIN, RoleType.ISSN_USER)
   getDocuments(@Parent() alias: AliasResponse) {
     const { id } = alias;
 
@@ -240,6 +274,8 @@ export class PersonsResolver {
   }
 
   @Mutation(() => PhotoResponse, { name: "addPersonPhoto" })
+  @UseGuards(JwtAuthGuard)
+  @Roles(RoleType.ISSN_ADMIN, RoleType.ISSN_USER)
   createFile(
     @Args('mediaInput') data: MediaInput
   ) {
@@ -252,6 +288,8 @@ export class PersonsResolver {
   }
 
   @Mutation(() => StatusResponse, { name: "addBundleMediaToPerson" })
+  @UseGuards(JwtAuthGuard)
+  @Roles(RoleType.ISSN_ADMIN, RoleType.ISSN_USER)
   addBundleMediaToPerson(
     @Args('mediaBundleInput') data: MediaBundleInput
   ) {
@@ -264,6 +302,8 @@ export class PersonsResolver {
   }
 
   @Mutation(() => StatusResponse, { name: "deleteMediaObject" })
+  @UseGuards(JwtAuthGuard)
+  @Roles(RoleType.ISSN_ADMIN, RoleType.ISSN_USER)
   deleteMediaObject(
     @Args('mediaId') id: number
   ) {

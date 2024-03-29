@@ -1,4 +1,4 @@
-import { Inject, Headers } from "@nestjs/common";
+import { Inject } from "@nestjs/common";
 import { Args, Context, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { ClientProxy } from "@nestjs/microservices";
 import { UserCredentialInput } from "./dto/user-credential.input";
@@ -15,7 +15,7 @@ export class AuthResolver {
   ) {}
 
   /**
-   *
+   * Get users session from keycloack
    * @param headers
    * @returns [SessionResponse]
    */

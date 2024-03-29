@@ -6,6 +6,7 @@ import { FilesResolver } from "./files.resolver";
   imports: [
     SharedModule,
     SharedModule.registerRmq("FILES_SERVICE", process.env.RABBITMQ_FILES_QUEUE),
+    SharedModule.registerRmq("AUTH_SERVICE", process.env.RABBITMQ_AUTH_QUEUE),
   ],
   providers: [FilesResolver]
 })
